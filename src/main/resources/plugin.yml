@@ -1,0 +1,10 @@
+name: CratesAndDropevents
+version: '1.0'
+main: dev.upscairs.cratesAndDropevents.CratesAndDropevents
+api-version: '1.21'
+commands:
+  dropevent:
+    ussage: /<command>
+  de:
+    ussage: /<command>
+
