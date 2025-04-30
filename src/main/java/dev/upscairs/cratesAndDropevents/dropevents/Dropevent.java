@@ -1,7 +1,7 @@
 package dev.upscairs.cratesAndDropevents.dropevents;
 
-import dev.upscairs.cratesAndDropevents.gui.functional.InvGuiUtils;
-import dev.upscairs.cratesAndDropevents.gui.helper.ListableGuiObject;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;

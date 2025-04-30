@@ -8,7 +8,6 @@ import dev.upscairs.cratesAndDropevents.dropevents.management.ActiveDropEvent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventManager;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventRunner;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

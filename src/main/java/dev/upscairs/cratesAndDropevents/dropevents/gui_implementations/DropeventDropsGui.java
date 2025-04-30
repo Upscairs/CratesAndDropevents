@@ -2,10 +2,14 @@ package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
-import dev.upscairs.cratesAndDropevents.gui.defaults.*;
-import dev.upscairs.cratesAndDropevents.gui.functional.InvGuiUtils;
-import dev.upscairs.cratesAndDropevents.gui.helper.ListableGuiObject;
-import dev.upscairs.cratesAndDropevents.gui.helper.ListableItemStack;
+import dev.upscairs.mcGuiFramework.base.InventoryGui;
+import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
+import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
+import dev.upscairs.mcGuiFramework.utility.ListableItemStack;
+import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.wrappers.ScrollableGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;

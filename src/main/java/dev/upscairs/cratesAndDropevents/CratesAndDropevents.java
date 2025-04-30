@@ -3,10 +3,10 @@ package dev.upscairs.cratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.DropeventCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
-import dev.upscairs.cratesAndDropevents.gui.functional.GuiInteractionHandler;
 import dev.upscairs.cratesAndDropevents.helper.EventDragonDropPreventListener;
 import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
-import org.bukkit.configuration.file.YamlConfiguration;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
+import dev.upscairs.mcGuiFramework.functionality.GuiInteractionHandler;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +27,8 @@ public final class CratesAndDropevents extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerConfigs();
+
+        McGuiFramework.initalize(this);
 
     }
 

@@ -1,10 +1,10 @@
 package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
-import dev.upscairs.cratesAndDropevents.gui.defaults.InteractableGui;
-import dev.upscairs.cratesAndDropevents.gui.defaults.InventoryGui;
-import dev.upscairs.cratesAndDropevents.gui.defaults.ItemDisplayGui;
-import dev.upscairs.cratesAndDropevents.gui.defaults.NumberSelectionGui;
+import dev.upscairs.mcGuiFramework.base.InventoryGui;
+import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
+import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.wrappers.NumberSelectionGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
