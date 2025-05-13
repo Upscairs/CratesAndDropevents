@@ -53,6 +53,7 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.error.name-no-spaces", "&4The name must not contain spaces.&r");
         defaultMessages.put("dropevent.error.setting-update-failed", "&4Failed to update setting.&r");
         defaultMessages.put("dropevent.error.use-no-perm", "&4You don't have permission to use this event.&r");
+        defaultMessages.put("dropevent.error.missing-id", "&4You need to specify an id to do that.&r");
 
         defaultMessages.put("system.command.error.player-not-found", "&4There is no player with that name.&r");
         defaultMessages.put("system.command.error.invalid-number", "&4Please specify a valid number.&r");

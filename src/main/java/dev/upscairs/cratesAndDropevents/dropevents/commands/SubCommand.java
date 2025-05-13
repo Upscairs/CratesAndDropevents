@@ -8,5 +8,5 @@ public interface SubCommand {
     String name();
     List<String> aliases();
     boolean execute(CommandSender sender, String[] args);
-    boolean checkPermission(CommandSender sender);
+    boolean hasPermission(CommandSender sender);
 }
