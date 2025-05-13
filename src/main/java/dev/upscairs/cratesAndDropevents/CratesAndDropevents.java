@@ -1,12 +1,13 @@
 package dev.upscairs.cratesAndDropevents;
 
+import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
-import dev.upscairs.cratesAndDropevents.dropevents.DropeventCommand;
+import dev.upscairs.cratesAndDropevents.dropevents.commands.DropeventCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.cratesAndDropevents.helper.EventDragonDropPreventListener;
-import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.functionality.GuiInteractionHandler;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,6 +17,8 @@ import java.io.IOException;
 public final class CratesAndDropevents extends JavaPlugin {
 
     private static ChatMessageConfig chatMessageConfig;
+
+    public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
 
     @Override
     public void onEnable() {
@@ -48,6 +51,7 @@ public final class CratesAndDropevents extends JavaPlugin {
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new GuiInteractionHandler(), this);
         getServer().getPluginManager().registerEvents(new EventDragonDropPreventListener(), this);
+        getServer().getPluginManager().registerEvents(new DropeventItemHandler(this), this);
     }
 
     private void registerConfigs() {
@@ -68,9 +72,9 @@ public final class CratesAndDropevents extends JavaPlugin {
 
         saveDefaultConfig();
 
-        getConfig().addDefault("dropevents.simultanous-limit.active", false);
-        getConfig().addDefault("dropevents.simultanous-limit.count", 10);
-        getConfig().addDefault("dropevents.normal-players.ownable", false);
+        getConfig().addDefault("dropevents.simultaneous-limit.active", false);
+        getConfig().addDefault("dropevents.simultaneous-limit.count", 5);
+        getConfig().addDefault("dropevents.normal-players.usable", false);
         getConfig().addDefault("dropevents.normal-players.start.online-player-condition", false);
         getConfig().addDefault("dropevents.normal-players.start.min-online-players", 10);
 

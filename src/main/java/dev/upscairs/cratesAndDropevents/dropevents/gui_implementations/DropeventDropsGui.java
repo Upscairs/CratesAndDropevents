@@ -9,7 +9,7 @@ import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import dev.upscairs.mcGuiFramework.utility.ListableItemStack;
 import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.ScrollableGui;
+import dev.upscairs.mcGuiFramework.wrappers.PageGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class DropeventDropsGui extends ScrollableGui implements InventoryHolder {
+public class DropeventDropsGui extends PageGui implements InventoryHolder {
 
     private Dropevent dropevent;
     private CommandSender sender;

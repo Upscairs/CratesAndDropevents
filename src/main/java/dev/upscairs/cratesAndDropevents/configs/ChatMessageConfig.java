@@ -1,9 +1,7 @@
 package dev.upscairs.cratesAndDropevents.configs;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -40,12 +38,13 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.success.created", "&2Event has been created.&r");
         defaultMessages.put("dropevent.success.removed", "&2Event has been removed.&r");
         defaultMessages.put("dropevent.success.setting-changed", "&2Setting changed successfully.&r");
+        defaultMessages.put("dropevent.success.given", "&2Event given&r");
 
         defaultMessages.put("dropevent.error.unknown-id", "&4Unknown event ID.&r");
         defaultMessages.put("dropevent.error.event-over", "&4This event is over.&r");
         defaultMessages.put("dropevent.error.not-teleportable", "&4This event cannot be teleported to.&r");
         defaultMessages.put("dropevent.error.already-teleported", "&4You can only port once to an event.&r");
-        defaultMessages.put("dropevent.error.simultanous-limit", "&4There are too many active events right now.&r");
+        defaultMessages.put("dropevent.error.simultaneous-limit", "&4There are too many active events right now.&r");
         defaultMessages.put("dropevent.error.ownable", "&4You don't have the permission to start an event.&r");
         defaultMessages.put("dropevent.error.player-amount", "&4There must be at least %p players online to start an event.&r");
         defaultMessages.put("dropevent.error.missing-name", "&4You must specify a name.&r");
@@ -53,7 +52,11 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.error.name-already-exists", "&4There is already an event with that name.&r");
         defaultMessages.put("dropevent.error.name-no-spaces", "&4The name must not contain spaces.&r");
         defaultMessages.put("dropevent.error.setting-update-failed", "&4Failed to update setting.&r");
+        defaultMessages.put("dropevent.error.use-no-perm", "&4You don't have permission to use this event.&r");
 
+        defaultMessages.put("system.command.error.player-not-found", "&4There is no player with that name.&r");
+        defaultMessages.put("system.command.error.invalid-number", "&4Please specify a valid number.&r");
+        defaultMessages.put("system.command.error.number-range-item", "&4You can only select 1 to 64 items.&r");
         defaultMessages.put("system.command.error.not-found", "&4Command not found&r");
 
     }

@@ -1,21 +1,29 @@
-package dev.upscairs.cratesAndDropevents.dropevents;
+package dev.upscairs.cratesAndDropevents.dropevents.commands;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.gui_implementations.DropeventEditGui;
 import dev.upscairs.cratesAndDropevents.dropevents.gui_implementations.DropeventListGui;
 import dev.upscairs.cratesAndDropevents.dropevents.management.ActiveDropEvent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventManager;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventRunner;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -156,6 +164,71 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage(messageConfig.getColored("dropevent.success.removed"));
 
                 return true;
+            }
+
+
+        }
+
+        if(args.length >= 3) {
+
+            if(args[0].equalsIgnoreCase("give")) {
+
+                //Retrieve and check arguments
+                Player target = plugin.getServer().getPlayer(args[1]);
+                if(target == null) {
+                    p.sendMessage(messageConfig.getColored("system.command.error.player-not-found"));
+                    return true;
+                }
+
+
+                Dropevent dropevent = DropeventStorage.getDropeventByName(args[2]);
+                if(dropevent == null) {
+                    p.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
+                    return true;
+                }
+
+
+                int count = 1;
+                if(args.length > 3) {
+                    try {
+                        count = Integer.parseInt(args[3]);
+                    } catch (NumberFormatException e) {
+                        p.sendMessage(messageConfig.getColored("system.command.error.invalid-number"));
+                        return true;
+                    }
+                }
+                if(count < 1 || count > 64) {
+                    p.sendMessage(messageConfig.getColored("system.command.error.number-range-item"));
+                }
+
+                //Set values
+                ItemStack givenItem = dropevent.getRenderItem();
+                givenItem.setAmount(count);
+
+                //Flag item as dropevent starter
+                NamespacedKey key = ((CratesAndDropevents) plugin).EVENT_KEY;
+
+                ItemMeta meta = givenItem.getItemMeta();
+                meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, dropevent.getName());
+                List<Component> lore = meta.lore();
+
+                //Subtext
+                if(lore == null) lore = new ArrayList<>();
+
+                lore.add(InvGuiUtils.generateDefaultHeaderComponent("", "#000000"));
+                lore.add(InvGuiUtils.generateDefaultHeaderComponent("Dropevent", "#A40064"));
+                lore.add(InvGuiUtils.generateDefaultTextComponent("Shift + Right Click to start", "#AAAAAA"));
+
+                meta.lore(lore);
+                givenItem.setItemMeta(meta);
+
+                //Give
+                target.getInventory().addItem(givenItem);
+                p.sendMessage(messageConfig.getColored("dropevent.success.given"));
+
+                return true;
+
+
             }
 
 

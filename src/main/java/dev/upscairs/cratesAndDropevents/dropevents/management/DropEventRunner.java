@@ -1,11 +1,10 @@
 package dev.upscairs.cratesAndDropevents.dropevents.management;
 
-import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
-import dev.upscairs.cratesAndDropevents.helper.BroadcastService;
+import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
+import dev.upscairs.cratesAndDropevents.helper.BroadcastService;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -49,9 +48,9 @@ public class DropEventRunner {
 
 
 
-    public void startCountdown(String locationName) {
+    public boolean startCountdown(String locationName) {
         this.locationName = locationName;
-        startCountdown();
+        return startCountdown();
     }
 
     /**
@@ -60,10 +59,10 @@ public class DropEventRunner {
      * Sends broadcast messages.
      *
      */
-    public void startCountdown() {
+    public boolean startCountdown() {
 
         if(!eventStartable()) {
-            return;
+            return false;
         }
 
         eventId = DropEventManager.register(plugin, dropevent, centerLocation);
@@ -92,6 +91,8 @@ public class DropEventRunner {
         if(dropevent.isBroadcasting()) {
             BroadcastService.sendGlobalBroadcast(translateBroadDataCodes(chatMessageConfig.get("dropevent.broadcast.global.countdown")));
         }
+
+        return true;
 
     }
 
@@ -126,19 +127,14 @@ public class DropEventRunner {
 
         FileConfiguration config = plugin.getConfig();
 
-        if(config.getBoolean("dropevents.simultanous-limit.active")
-            && config.getInt("dropevents.simultanous-limit.count") >= DropEventManager.getActiveCount()) {
-            hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.simultanous-limit"));
+        if(config.getBoolean("dropevents.simultaneous-limit.active")
+            && DropEventManager.getActiveCount() >= config.getInt("dropevents.simultaneous-limit.count")) {
+            hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.simultaneous-limit"));
             return false;
         }
 
         if(hostingPlayer.isOp()) {
             return true;
-        }
-
-        if(!config.getBoolean("dropevents.normal-players.ownable")) {
-            hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.ownable"));
-            return false;
         }
 
         if(config.getBoolean("dropevents.normal-players.start.online-player-condition")

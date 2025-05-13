@@ -6,14 +6,14 @@ import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.ScrollableGui;
+import dev.upscairs.mcGuiFramework.wrappers.PageGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.List;
 
-public class DropeventListGui extends ScrollableGui implements InventoryHolder {
+public class DropeventListGui extends PageGui implements InventoryHolder {
 
     List<Dropevent> dropevents;
     CommandSender sender;

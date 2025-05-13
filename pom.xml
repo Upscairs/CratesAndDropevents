@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>dev.upscairs</groupId>
     <artifactId>cratesanddropevents</artifactId>
     <version>1.0</version>
@@ -14,11 +15,15 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- für Copy-Plugin -->
+        <shaded.classifier>shaded</shaded.classifier>
     </properties>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
+
+            <!-- 1) Compiler-Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -28,18 +33,23 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!-- 2) Shade: erzeugt target/cratesanddropevents-1.0-shaded.jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.5.3</version>
                 <executions>
                     <execution>
+                        <id>shade-all</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <!-- Wir wollen ein extra "-shaded.jar" -->
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>${shaded.classifier}</shadedClassifierName>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
                                 <filter>
@@ -54,17 +64,46 @@
                         </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <outputDirectory>${outputDirectory}</outputDirectory>
-                </configuration>
             </plugin>
+
+            <!-- 3) Dependency-Plugin: Kopiert das -shaded.jar ins Plugin-Verzeichnis -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-shaded-to-plugins</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>${shaded.classifier}</classifier>
+                                    <!-- Ausgabe im plugins-Ordner -->
+                                    <outputDirectory>${outputDirectory}</outputDirectory>
+                                    <!-- Benenne es um auf das „normale“ jar -->
+                                    <destFileName>${project.build.finalName}.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- 4) Exec-Plugin: RCON Reload -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <executions>
                     <execution>
-                        <id>post-copy-command</id>
+                        <id>post-copy-reload</id>
                         <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
@@ -76,11 +115,18 @@
                                 <argument>-c</argument>
                                 <argument>mcrcon -H localhost -P 25575 -p testserver_rcon "reload confirm"</argument>
                             </arguments>
+                            <!-- Fehler-Code 1 akzeptieren -->
+                            <successCodes>
+                                <successCode>0</successCode>
+                                <successCode>1</successCode>
+                            </successCodes>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -105,16 +151,26 @@
     </repositories>
 
     <dependencies>
+        <!-- Paper API (provided) -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- GUI-Framework -->
         <dependency>
             <groupId>com.github.Upscairs</groupId>
             <artifactId>McGuiFramework</artifactId>
-            <version>v1.0.0</version>
+            <version>v1.1.0</version>
+        </dependency>
+
+        <!-- Adventure API -->
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.21.0</version>
         </dependency>
     </dependencies>
 
@@ -130,7 +186,6 @@
                 <outputDirectory>/home/nutzer/Dokumente/Test Server/plugins</outputDirectory>
             </properties>
         </profile>
-
         <profile>
             <id>second-directory</id>
             <activation>
@@ -142,7 +197,6 @@
                 <outputDirectory>/home/user/Dokumente/Test Server/plugins</outputDirectory>
             </properties>
         </profile>
-
         <profile>
             <id>default-directory</id>
             <activation>
@@ -153,4 +207,5 @@
             </properties>
         </profile>
     </profiles>
+
 </project>
