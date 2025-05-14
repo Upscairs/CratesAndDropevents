@@ -34,7 +34,6 @@ public class DEEditSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!hasPermission(sender)) return true;
-        if(!(sender instanceof Player p)) return true;
 
         String eventName = args[1];
         String setting = args[2];
@@ -43,7 +42,7 @@ public class DEEditSubCommand implements SubCommand {
         Dropevent event = DropeventStorage.getDropeventByName(eventName);
 
         if (event == null) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
             return true;
         }
 
@@ -52,9 +51,9 @@ public class DEEditSubCommand implements SubCommand {
         DropeventStorage.saveDropevent(event);
 
         if (success) {
-            p.sendMessage(messageConfig.getColored("dropevent.success.setting-changed"));
+            sender.sendMessage(messageConfig.getColored("dropevent.success.setting-changed"));
         } else {
-            p.sendMessage(messageConfig.getColored("dropevent.error.setting-update-failed"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.setting-update-failed"));
         }
 
         return true;

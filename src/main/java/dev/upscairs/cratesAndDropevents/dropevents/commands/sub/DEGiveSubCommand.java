@@ -41,19 +41,18 @@ public class DEGiveSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!hasPermission(sender)) return true;
-        if(!(sender instanceof Player p)) return true;
 
         //Retrieve and check arguments
         Player target = plugin.getServer().getPlayer(args[1]);
         if(target == null) {
-            p.sendMessage(messageConfig.getColored("system.command.error.player-not-found"));
+            sender.sendMessage(messageConfig.getColored("system.command.error.player-not-found"));
             return true;
         }
 
 
         Dropevent dropevent = DropeventStorage.getDropeventByName(args[2]);
         if(dropevent == null) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
             return true;
         }
 
@@ -63,12 +62,12 @@ public class DEGiveSubCommand implements SubCommand {
             try {
                 count = Integer.parseInt(args[3]);
             } catch (NumberFormatException e) {
-                p.sendMessage(messageConfig.getColored("system.command.error.invalid-number"));
+                sender.sendMessage(messageConfig.getColored("system.command.error.invalid-number"));
                 return true;
             }
         }
         if(count < 1 || count > 64) {
-            p.sendMessage(messageConfig.getColored("system.command.error.number-range-item"));
+            sender.sendMessage(messageConfig.getColored("system.command.error.number-range-item"));
         }
 
         //Set values
@@ -94,7 +93,7 @@ public class DEGiveSubCommand implements SubCommand {
 
         //Give
         target.getInventory().addItem(givenItem);
-        p.sendMessage(messageConfig.getColored("dropevent.success.given"));
+        sender.sendMessage(messageConfig.getColored("dropevent.success.given"));
 
         return true;
 

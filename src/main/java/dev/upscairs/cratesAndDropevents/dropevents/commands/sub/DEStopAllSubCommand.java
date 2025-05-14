@@ -31,10 +31,9 @@ public class DEStopAllSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!hasPermission(sender)) return true;
-        if(!(sender instanceof Player p)) return true;
 
         DropEventManager.stopAll();
-        p.sendMessage(messageConfig.getColored("dropevent.success.all-stopped"));
+        sender.sendMessage(messageConfig.getColored("dropevent.success.all-stopped"));
         return true;
     }
 

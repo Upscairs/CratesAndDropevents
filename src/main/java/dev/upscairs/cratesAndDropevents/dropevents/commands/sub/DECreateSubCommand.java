@@ -32,28 +32,27 @@ public class DECreateSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!hasPermission(sender)) return true;
-        if(!(sender instanceof Player p)) return true;
 
         if(args.length == 1) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));
             return true;
         }
 
         if (args.length > 2) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.name-no-spaces"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.name-no-spaces"));
             return true;
         }
 
         String eventName = args[1];
 
         if (DropeventStorage.getDropeventByName(eventName) != null) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.name-already-exists"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.name-already-exists"));
             return true;
         }
 
         Dropevent dropevent = new Dropevent(eventName);
         DropeventStorage.saveDropevent(dropevent);
-        p.sendMessage(messageConfig.getColored("dropevent.success.created"));
+        sender.sendMessage(messageConfig.getColored("dropevent.success.created"));
         return true;
     }
 

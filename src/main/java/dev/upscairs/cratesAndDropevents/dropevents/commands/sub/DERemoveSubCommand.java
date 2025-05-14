@@ -32,22 +32,21 @@ public class DERemoveSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!hasPermission(sender)) return true;
-        if(!(sender instanceof Player p)) return true;
 
         if(args.length == 1) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));
             return true;
         }
 
         Dropevent dropevent = DropeventStorage.getDropeventByName(args[1]);
 
         if (dropevent == null) {
-            p.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
+            sender.sendMessage(messageConfig.getColored("dropevent.error.name-not-found"));
             return true;
         }
 
         DropeventStorage.removeDropevent(dropevent);
-        p.sendMessage(messageConfig.getColored("dropevent.success.removed"));
+        sender.sendMessage(messageConfig.getColored("dropevent.success.removed"));
 
         return true;
 

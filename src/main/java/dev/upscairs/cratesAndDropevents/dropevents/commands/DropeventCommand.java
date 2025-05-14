@@ -55,11 +55,10 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
         }
 
         ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
-        if(!(sender instanceof Player p)) return true;
 
         SubCommand handler = subcommands.get(args[0]);
         if(handler == null) {
-            p.sendMessage(messageConfig.getColored("system.command.error.not-found"));
+            sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
             return true;
         }
 
