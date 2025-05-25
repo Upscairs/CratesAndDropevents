@@ -3,6 +3,7 @@ package dev.upscairs.cratesAndDropevents.crates.rewards;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -12,61 +13,77 @@ import java.util.List;
 
 public class CrateRewardStorage {
 
-    private static FileConfiguration config;
-    private static File file;
-    private static final String fileName = "crate-rewards.yml";
+    private FileConfiguration config;
+    private File file;
 
-    public static void init(JavaPlugin plugin) {
+    private final Plugin plugin;
+    private final String fileName = "crate-rewards.yml";
+
+    public CrateRewardStorage(JavaPlugin plugin) {
+        this.plugin = plugin;
+        loadConfig();
+    }
+
+    private void loadConfig() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
         }
         file = new File(plugin.getDataFolder(), fileName);
         if (!file.exists()) {
-            try { file.createNewFile(); } catch (IOException ignored) {}
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public static void saveReward(CrateReward reward) {
+    // Speichert die Config auf die Datei
+    private void saveConfig() {
+        try {
+            config.save(file);
+        } catch (IOException e) {
+            plugin.getLogger().severe("Failed to save crate-rewards.yml!");
+            e.printStackTrace();
+        }
+    }
+
+    public void saveReward(CrateReward reward) {
         config.set("rewards." + reward.getName(), reward);
-        saveFile();
+        saveConfig();
     }
 
-    public static void removeReward(String id) {
+    public void removeReward(String id) {
         config.set("rewards." + id, null);
-        saveFile();
+        saveConfig();
     }
 
-    public static List<String> getRewardIds() {
+    public List<String> getRewardIds() {
         ConfigurationSection section = config.getConfigurationSection("rewards");
-        return section != null ? new ArrayList<>(section.getKeys(false)) : new ArrayList<>();
+        if (section == null) return new ArrayList<>();
+        return new ArrayList<>(section.getKeys(false));
     }
 
-    public static List<CrateReward> getAll() {
+    public List<CrateReward> getAllRewards() {
         List<CrateReward> list = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("rewards");
-        if (section != null) {
-            for (String key : section.getKeys(false)) {
-                Object obj = config.get("rewards." + key);
-                if (obj instanceof CrateReward) {
-                    list.add((CrateReward) obj);
-                }
+        if (section == null) return list;
+
+        for (String key : section.getKeys(false)) {
+            Object obj = config.get("rewards." + key);
+            if (obj instanceof CrateReward) {
+                list.add((CrateReward) obj);
             }
         }
         return list;
     }
 
-    public static CrateReward getRewardById(String id) {
-        if (config.contains("rewards." + id)) {
-            Object obj = config.get("rewards." + id);
-            if (obj instanceof CrateReward) {
-                return (CrateReward) obj;
-            }
+    public CrateReward getRewardById(String id) {
+        Object obj = config.get("rewards." + id);
+        if (obj instanceof CrateReward) {
+            return (CrateReward) obj;
         }
         return null;
-    }
-
-    private static void saveFile() {
-        try { config.save(file); } catch (IOException e) { e.printStackTrace(); }
     }
 }

@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -49,8 +50,7 @@ public class CrateRewardCommand implements CommandExecutor, TabCompleter {
             CrateReward crateReward = new CrateReward(args[1], rewards, plugin);
 
 
-            CrateRewardStorage.saveReward(crateReward);
-
+            ((CratesAndDropevents) plugin).getCrateRewardStorage().saveReward(crateReward);
         }
 
         return true;

@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
@@ -79,7 +80,10 @@ public class CrateReward implements ConfigurationSerializable {
     }
 
     @SuppressWarnings("unchecked")
-    public static CrateReward deserialize(Map<String, Object> map, Plugin plugin) {
+    public static CrateReward deserialize(Map<String, Object> map) {
+
+        Plugin plugin = CratesAndDropevents.getInstance();
+
         String id = (String) map.get("name");
         if (id == null) {
             throw new IllegalArgumentException("Missing name for CrateReward");

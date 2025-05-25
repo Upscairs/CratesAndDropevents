@@ -45,12 +45,21 @@ public class Crate implements ConfigurationSerializable {
 
     }
 
-    public Crate(ItemStack crateItem, Plugin plugin) {
-        this.crateItem = crateItem;
-        this.name = crateItem.getItemMeta().getDisplayName();
-        addCrateFlag();
+    public Crate(String name, ItemStack crateItem, Plugin plugin) {
 
         this.plugin = plugin;
+        this.name = name;
+
+        crateItem.setAmount(1);
+        crateItem.setType(Material.PLAYER_HEAD);
+        ItemMeta meta = crateItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent(name, "#FFAA00"));
+        crateItem.setItemMeta(meta);
+        this.crateItem = crateItem;
+
+        addCrateFlag();
+
+
     }
 
     public Crate(ItemStack crateItem, Map<CrateReward, Integer> rewards, Plugin plugin) {
@@ -122,6 +131,7 @@ public class Crate implements ConfigurationSerializable {
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new LinkedHashMap<>();
+        map.put("name", this.name);
         map.put("crateItem", crateItem);
 
         List<Map<String, Object>> rewardsList = new ArrayList<>();
@@ -136,17 +146,20 @@ public class Crate implements ConfigurationSerializable {
         return map;
     }
 
-    public static Crate deserialize(Map<String, Object> map, Plugin plugin) {
+    public static Crate deserialize(Map<String, Object> map) {
 
+        Plugin plugin = CratesAndDropevents.getInstance();
+
+        String name = (String) map.get("name");
         ItemStack crateItem = (ItemStack) map.get("crateItem");
-        Crate crate = new Crate(crateItem, plugin);
+        Crate crate = new Crate(name, crateItem, plugin);
 
         Object obj = map.get("rewards");
         if (obj instanceof List<?> list) {
             for (Object element : list) {
                 if (!(element instanceof Map<?, ?> rewardMap)) continue;
 
-                CrateReward reward = CrateRewardStorage.getRewardById(rewardMap.get("reward").toString());
+                CrateReward reward = ((CratesAndDropevents) plugin).getCrateRewardStorage().getRewardById(rewardMap.get("reward").toString());
                 Number chanceNum = (Number) rewardMap.get("chance");
                 crate.addReward(reward, chanceNum.intValue());
             }

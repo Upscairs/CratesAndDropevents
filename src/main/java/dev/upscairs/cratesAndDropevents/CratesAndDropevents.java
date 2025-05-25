@@ -3,6 +3,7 @@ package dev.upscairs.cratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.Crate;
 import dev.upscairs.cratesAndDropevents.crates.CrateCommand;
+import dev.upscairs.cratesAndDropevents.crates.CratePlaceHandler;
 import dev.upscairs.cratesAndDropevents.crates.CrateStorage;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardCommand;
@@ -15,6 +16,7 @@ import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.functionality.GuiInteractionHandler;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -27,16 +29,26 @@ public final class CratesAndDropevents extends JavaPlugin {
     public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
     public final NamespacedKey CRATE_KEY = new NamespacedKey(this,"CRATE");
 
+    private static CratesAndDropevents instance;
+
+    private CrateStorage crateStorage;
+    private CrateRewardStorage crateRewardStorage;
+
+
     @Override
     public void onEnable() {
 
+        instance = this;
+
+        ConfigurationSerialization.registerClass(CrateReward.class, "CrateReward" );
         ConfigurationSerialization.registerClass(Dropevent.class, "Dropevent");
         ConfigurationSerialization.registerClass(Crate.class, "Crate");
-        ConfigurationSerialization.registerClass(CrateReward.class, "CrateReward" );
+
 
         DropeventStorage.init(this);
-        CrateStorage.init(this);
-        CrateRewardStorage.init(this);
+        this.crateRewardStorage = new CrateRewardStorage(this);
+        this.crateStorage = new CrateStorage(this);
+
 
         registerCommands();
         registerEvents();
@@ -68,6 +80,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GuiInteractionHandler(), this);
         getServer().getPluginManager().registerEvents(new EventDragonDropPreventListener(), this);
         getServer().getPluginManager().registerEvents(new DropeventItemHandler(this), this);
+        getServer().getPluginManager().registerEvents(new CratePlaceHandler(this), this);
     }
 
     private void registerConfigs() {
@@ -103,5 +116,16 @@ public final class CratesAndDropevents extends JavaPlugin {
         return chatMessageConfig;
     }
 
+    public static CratesAndDropevents getInstance() {
+        return instance;
+    }
+
+    public CrateStorage getCrateStorage() {
+        return crateStorage;
+    }
+
+    public CrateRewardStorage getCrateRewardStorage() {
+        return crateRewardStorage;
+    }
 
 }
