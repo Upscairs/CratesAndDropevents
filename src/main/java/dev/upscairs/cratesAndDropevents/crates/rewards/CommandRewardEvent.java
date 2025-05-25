@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.CompletableFuture;
 
-public class CommandRewardEvent implements RewardEvent {
+public class CommandRewardEvent implements CrateRewardEvent {
 
     private final String command;
     private final Plugin plugin;
@@ -14,6 +14,10 @@ public class CommandRewardEvent implements RewardEvent {
     public CommandRewardEvent(String command, Plugin plugin) {
         this.command = command;
         this.plugin = plugin;
+    }
+
+    public String getCommand() {
+        return command;
     }
 
     @Override

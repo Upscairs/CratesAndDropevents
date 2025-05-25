@@ -6,7 +6,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.concurrent.CompletableFuture;
 
-public class DelayRewardEvent implements RewardEvent {
+public class DelayRewardEvent implements CrateRewardEvent {
 
     private final long ticks;
     private final Plugin plugin;
@@ -14,6 +14,10 @@ public class DelayRewardEvent implements RewardEvent {
     public DelayRewardEvent(long ticks, Plugin plugin) {
         this.ticks = ticks;
         this.plugin = plugin;
+    }
+
+    public long getTicks() {
+        return ticks;
     }
 
     @Override

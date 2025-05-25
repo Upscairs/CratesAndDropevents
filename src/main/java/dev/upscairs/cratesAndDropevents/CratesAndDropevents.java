@@ -1,6 +1,12 @@
 package dev.upscairs.cratesAndDropevents;
 
 import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.crates.Crate;
+import dev.upscairs.cratesAndDropevents.crates.CrateCommand;
+import dev.upscairs.cratesAndDropevents.crates.CrateStorage;
+import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
+import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardCommand;
+import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardStorage;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.DropeventCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
@@ -19,13 +25,18 @@ public final class CratesAndDropevents extends JavaPlugin {
     private static ChatMessageConfig chatMessageConfig;
 
     public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
+    public final NamespacedKey CRATE_KEY = new NamespacedKey(this,"CRATE");
 
     @Override
     public void onEnable() {
 
-        ConfigurationSerialization.registerClass(Dropevent.class);
+        ConfigurationSerialization.registerClass(Dropevent.class, "Dropevent");
+        ConfigurationSerialization.registerClass(Crate.class, "Crate");
+        ConfigurationSerialization.registerClass(CrateReward.class, "CrateReward" );
 
         DropeventStorage.init(this);
+        CrateStorage.init(this);
+        CrateRewardStorage.init(this);
 
         registerCommands();
         registerEvents();
@@ -46,6 +57,11 @@ public final class CratesAndDropevents extends JavaPlugin {
 
         getCommand("de").setExecutor(new DropeventCommand(this));
         getCommand("de").setTabCompleter(new DropeventCommand(this));
+
+        getCommand("crate").setExecutor(new CrateCommand(this));
+        getCommand("crate").setTabCompleter(new CrateCommand(this));
+
+        getCommand("reward").setExecutor(new CrateRewardCommand(this));
     }
 
     private void registerEvents() {

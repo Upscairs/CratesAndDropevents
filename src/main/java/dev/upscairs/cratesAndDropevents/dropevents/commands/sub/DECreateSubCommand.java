@@ -6,7 +6,6 @@ import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 

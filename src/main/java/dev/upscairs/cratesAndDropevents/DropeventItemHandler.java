@@ -27,7 +27,7 @@ public class DropeventItemHandler implements Listener {
         ItemStack usedItem = event.getItem();
         Player player = event.getPlayer();
 
-        if(usedItem.getItemMeta().getPersistentDataContainer().has(plugin.EVENT_KEY)) {
+        if(usedItem != null && usedItem.getItemMeta().getPersistentDataContainer().has(plugin.EVENT_KEY)) {
             event.setCancelled(true);
             useEventIfPossible(usedItem, player);
         }
@@ -59,6 +59,10 @@ public class DropeventItemHandler implements Listener {
 
         String eventName = usedItem.getItemMeta().getPersistentDataContainer().get(plugin.EVENT_KEY, PersistentDataType.STRING);
         Dropevent dropevent = DropeventStorage.getDropeventByName(eventName);
+
+        if(dropevent == null) {
+            player.sendMessage(plugin.getChatMessageConfig().getColored("dropevent.error.use-no-perm"));
+        }
 
         DropEventRunner der = new DropEventRunner(dropevent, player, plugin);
         boolean startSuccessful = der.startCountdown();

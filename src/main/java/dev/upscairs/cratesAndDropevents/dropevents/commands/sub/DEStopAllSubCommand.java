@@ -5,7 +5,6 @@ import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventManager;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 

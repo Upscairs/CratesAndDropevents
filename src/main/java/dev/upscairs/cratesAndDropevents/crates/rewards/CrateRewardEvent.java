@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface RewardEvent {
+public interface CrateRewardEvent {
 
     CompletableFuture<Void> execute(Player player);
 

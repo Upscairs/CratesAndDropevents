@@ -28,15 +28,18 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
 
 
     public void registerCommands() {
-        register(new DECreateSubCommand((CratesAndDropevents) plugin));
-        register(new DEEditSubCommand((CratesAndDropevents) plugin));
-        register(new DEGiveSubCommand((CratesAndDropevents) plugin));
-        register(new DEInfoSubCommand((CratesAndDropevents) plugin));
+
+        CratesAndDropevents c = (CratesAndDropevents) plugin;
+
+        register(new DECreateSubCommand(c));
+        register(new DEEditSubCommand(c));
+        register(new DEGiveSubCommand(c));
+        register(new DEInfoSubCommand(c));
         register(new DEListSubCommand());
-        register(new DERemoveSubCommand((CratesAndDropevents) plugin));
-        register(new DEStartSubCommand((CratesAndDropevents) plugin));
-        register(new DEStopAllSubCommand((CratesAndDropevents) plugin));
-        register(new DETpSubCommand((CratesAndDropevents) plugin));
+        register(new DERemoveSubCommand(c));
+        register(new DEStartSubCommand(c));
+        register(new DEStopAllSubCommand(c));
+        register(new DETpSubCommand(c));
     }
 
     private void register(SubCommand cmd) {
