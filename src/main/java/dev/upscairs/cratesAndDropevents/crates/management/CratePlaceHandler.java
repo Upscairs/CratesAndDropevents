@@ -1,9 +1,8 @@
-package dev.upscairs.cratesAndDropevents.crates;
+package dev.upscairs.cratesAndDropevents.crates.management;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

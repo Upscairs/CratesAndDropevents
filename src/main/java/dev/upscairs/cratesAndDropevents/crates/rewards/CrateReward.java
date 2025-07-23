@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.crates.rewards.payouts.*;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;

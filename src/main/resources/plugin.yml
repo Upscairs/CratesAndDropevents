@@ -7,7 +7,5 @@ commands:
     ussage: /<command>
   de:
     ussage: /<command>
-  crate:
-    ussage: /<command>
-  reward:
+  crates:
     ussage: /<command>

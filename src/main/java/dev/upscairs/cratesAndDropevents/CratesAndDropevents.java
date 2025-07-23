@@ -1,27 +1,19 @@
 package dev.upscairs.cratesAndDropevents;
 
 import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
-import dev.upscairs.cratesAndDropevents.crates.Crate;
-import dev.upscairs.cratesAndDropevents.crates.CrateCommand;
-import dev.upscairs.cratesAndDropevents.crates.CratePlaceHandler;
-import dev.upscairs.cratesAndDropevents.crates.CrateStorage;
+import dev.upscairs.cratesAndDropevents.crates.management.Crate;
+import dev.upscairs.cratesAndDropevents.crates.commands.CratesCommand;
+import dev.upscairs.cratesAndDropevents.crates.management.CratePlaceHandler;
+import dev.upscairs.cratesAndDropevents.crates.management.CrateStorage;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
-import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardCommand;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardStorage;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.DropeventCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.cratesAndDropevents.helper.EventDragonDropPreventListener;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
-import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
-import dev.upscairs.mcGuiFramework.functionality.GuiInteractionHandler;
-import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -51,8 +43,8 @@ public final class CratesAndDropevents extends JavaPlugin {
 
 
         DropeventStorage.init(this);
-        this.crateRewardStorage = new CrateRewardStorage(this);
-        this.crateStorage = new CrateStorage(this);
+        CrateRewardStorage.init(this);
+        CrateStorage.init(this);
 
 
         registerCommands();
@@ -75,10 +67,9 @@ public final class CratesAndDropevents extends JavaPlugin {
         getCommand("de").setExecutor(new DropeventCommand(this));
         getCommand("de").setTabCompleter(new DropeventCommand(this));
 
-        getCommand("crate").setExecutor(new CrateCommand(this));
-        getCommand("crate").setTabCompleter(new CrateCommand(this));
+        getCommand("crates").setExecutor(new CratesCommand(this));
+        getCommand("crates").setTabCompleter(new CratesCommand(this));
 
-        getCommand("reward").setExecutor(new CrateRewardCommand(this));
     }
 
     private void registerEvents() {

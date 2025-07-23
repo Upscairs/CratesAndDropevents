@@ -3,7 +3,6 @@ package dev.upscairs.cratesAndDropevents.crates.rewards;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -13,18 +12,12 @@ import java.util.List;
 
 public class CrateRewardStorage {
 
-    private FileConfiguration config;
-    private File file;
+    private static FileConfiguration config;
+    private static File file;
 
-    private final Plugin plugin;
-    private final String fileName = "crate-rewards.yml";
+    private static final String fileName = "crate-rewards.yml";
 
-    public CrateRewardStorage(JavaPlugin plugin) {
-        this.plugin = plugin;
-        loadConfig();
-    }
-
-    private void loadConfig() {
+    public static void init(JavaPlugin plugin) {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
         }
@@ -39,33 +32,31 @@ public class CrateRewardStorage {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    // Speichert die Config auf die Datei
-    private void saveConfig() {
+    private static void saveConfig() {
         try {
             config.save(file);
         } catch (IOException e) {
-            plugin.getLogger().severe("Failed to save crate-rewards.yml!");
             e.printStackTrace();
         }
     }
 
-    public void saveReward(CrateReward reward) {
+    public static void saveReward(CrateReward reward) {
         config.set("rewards." + reward.getName(), reward);
         saveConfig();
     }
 
-    public void removeReward(String id) {
+    public static void removeReward(String id) {
         config.set("rewards." + id, null);
         saveConfig();
     }
 
-    public List<String> getRewardIds() {
+    public static List<String> getRewardIds() {
         ConfigurationSection section = config.getConfigurationSection("rewards");
         if (section == null) return new ArrayList<>();
         return new ArrayList<>(section.getKeys(false));
     }
 
-    public List<CrateReward> getAllRewards() {
+    public static List<CrateReward> getAllRewards() {
         List<CrateReward> list = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("rewards");
         if (section == null) return list;
@@ -79,7 +70,7 @@ public class CrateRewardStorage {
         return list;
     }
 
-    public CrateReward getRewardById(String id) {
+    public static CrateReward getRewardById(String id) {
         Object obj = config.get("rewards." + id);
         if (obj instanceof CrateReward) {
             return (CrateReward) obj;

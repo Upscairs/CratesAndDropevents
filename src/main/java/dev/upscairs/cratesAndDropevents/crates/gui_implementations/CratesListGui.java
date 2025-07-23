@@ -1,5 +1,7 @@
-package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
+package dev.upscairs.cratesAndDropevents.crates.gui_implementations;
 
+import dev.upscairs.cratesAndDropevents.crates.management.Crate;
+import dev.upscairs.cratesAndDropevents.crates.management.CrateStorage;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
@@ -12,23 +14,22 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class DropeventListGui {
+public class CratesListGui {
 
-    List<Dropevent> dropevents;
+    List<Crate> crates;
     CommandSender sender;
 
     private PageGui gui;
 
-    public DropeventListGui(CommandSender sender) {
+    public CratesListGui(CommandSender sender) {
+        this.crates = CrateStorage.getAll();
 
-        this.dropevents = DropeventStorage.getAll();
-
-        gui = new PageGui(new InteractableGui(new ItemDisplayGui()), dropevents, 0);
+        gui = new PageGui(new InteractableGui(new ItemDisplayGui()), crates, 0);
         configureClickReaction();
 
         this.sender = sender;
         gui.showPageInTitle(true);
-        gui.setTitle("All Dropevents");
+        gui.setTitle("All Crates");
     }
 
 
@@ -37,11 +38,11 @@ public class DropeventListGui {
             if(slot >= 0 && slot <= 44) {
                 int selectedIndex = slot+45*gui.getPage();
 
-                if(dropevents.size() <= selectedIndex) {
+                if(crates.size() <= selectedIndex) {
                     return new PreventCloseGui();
                 }
 
-                Bukkit.dispatchCommand(sender, "dropevent info " + dropevents.get(selectedIndex).getName());
+                Bukkit.dispatchCommand(sender, "crates info " + crates.get(selectedIndex).getName());
                 return new PreventCloseGui();
 
             }

@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.crates;
+package dev.upscairs.cratesAndDropevents.crates.management;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,18 +12,13 @@ import java.util.List;
 
 public class CrateStorage {
 
-    private FileConfiguration config;
-    private File file;
+    private static FileConfiguration config;
+    private static File file;
 
-    private final JavaPlugin plugin;
-    private final String fileName = "crates.yml";
+    private static final String fileName = "crates.yml";
 
-    public CrateStorage(JavaPlugin plugin) {
-        this.plugin = plugin;
-        loadConfig();
-    }
 
-    private void loadConfig() {
+    public static void init(JavaPlugin plugin) {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdirs();
         }
@@ -38,36 +33,24 @@ public class CrateStorage {
         config = YamlConfiguration.loadConfiguration(file);
     }
 
-    private void saveConfig() {
-        try {
-            config.save(file);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Failed to save crates.yml!");
-            e.printStackTrace();
-        }
-    }
 
-    // Speichert ein Crate unter dem Namen
-    public void saveCrate(Crate crate) {
+    public static void saveCrate(Crate crate) {
         config.set("crates." + crate.getName(), crate);
-        saveConfig();
+        saveFile();
     }
 
-    // Entfernt ein Crate nach ID
-    public void removeCrate(String id) {
+    public static void removeCrate(String id) {
         config.set("crates." + id, null);
-        saveConfig();
+        saveFile();
     }
 
-    // Gibt alle Crate-Namen zurück
-    public List<String> getCrateIds() {
+    public static List<String> getCrateIds() {
         ConfigurationSection section = config.getConfigurationSection("crates");
         if (section == null) return new ArrayList<>();
         return new ArrayList<>(section.getKeys(false));
     }
 
-    // Lädt alle Crates als Liste
-    public List<Crate> getAllCrates() {
+    public static List<Crate> getAll() {
         List<Crate> list = new ArrayList<>();
         ConfigurationSection section = config.getConfigurationSection("crates");
         if (section == null) return list;
@@ -81,12 +64,17 @@ public class CrateStorage {
         return list;
     }
 
-    // Lädt ein Crate per ID
-    public Crate getCrateById(String id) {
+    public static Crate getCrateById(String id) {
         Object obj = config.get("crates." + id);
         if (obj instanceof Crate) {
             return (Crate) obj;
         }
         return null;
+    }
+
+    private static void saveFile() {
+        try {
+            config.save(file);
+        } catch (IOException ignored) {}
     }
 }

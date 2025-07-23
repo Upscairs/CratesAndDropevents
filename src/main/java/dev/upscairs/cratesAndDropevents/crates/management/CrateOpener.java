@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.crates;
+package dev.upscairs.cratesAndDropevents.crates.management;
 
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
 import org.bukkit.Location;

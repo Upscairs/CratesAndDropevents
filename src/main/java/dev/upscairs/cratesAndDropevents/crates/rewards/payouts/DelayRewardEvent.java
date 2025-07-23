@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.crates.rewards;
+package dev.upscairs.cratesAndDropevents.crates.rewards.payouts;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

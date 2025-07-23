@@ -1,8 +1,13 @@
-package dev.upscairs.cratesAndDropevents.crates;
+package dev.upscairs.cratesAndDropevents.crates.commands;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.crates.commands.sub.*;
+import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.crates.rewards.*;
+import dev.upscairs.cratesAndDropevents.crates.rewards.payouts.*;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
+import dev.upscairs.cratesAndDropevents.dropevents.commands.sub.*;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -18,17 +23,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CrateCommand implements CommandExecutor, TabCompleter {
+public class CratesCommand implements CommandExecutor, TabCompleter {
 
     private Plugin plugin;
     private final Map<String, SubCommand> subcommands = new HashMap<>();
 
-    public CrateCommand(Plugin plugin) {
+    public CratesCommand(Plugin plugin) {
         this.plugin = plugin;
+        registerCommands();
     }
 
     public void registerCommands() {
-        //TODO
+        CratesAndDropevents c = (CratesAndDropevents) plugin;
+
+        register(new CrCreateSubCommand());
+        register(new CrEditSubCommand(c));
+        register(new CrGiveSubCommand());
+        register(new CrInfoSubCommand());
+        register(new CrListSubCommand());
     }
 
     public void register(SubCommand cmd) {
@@ -39,8 +51,26 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        //TODO necessary?
         registerCommands();
 
+        if(args.length == 0) {
+            ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
+            sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
+            return true;
+        }
+
+        ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
+
+        SubCommand handler = subcommands.get(args[0]);
+        if(handler == null) {
+            sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
+            return true;
+        }
+
+        return handler.execute(sender, args);
+
+        /*
         if(args[0].equalsIgnoreCase("test")) {
             Crate crate = new Crate(args[1], plugin);
             if(sender instanceof Player p) {
@@ -74,7 +104,7 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
 
         }
 
-        return true;
+        return true;*/
 
     }
 

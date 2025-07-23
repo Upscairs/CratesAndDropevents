@@ -49,6 +49,7 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        //TODO necessary?
         registerCommands();
 
         if(args.length == 0) {

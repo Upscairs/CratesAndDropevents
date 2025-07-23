@@ -1,10 +1,10 @@
-package dev.upscairs.cratesAndDropevents.crates;
+package dev.upscairs.cratesAndDropevents.crates.management;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
-import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardStorage;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.*;
 
 @SerializableAs("Crate")
-public class Crate implements ConfigurationSerializable {
+public class Crate implements ConfigurationSerializable, ListableGuiObject {
 
     private String name;
     private ItemStack crateItem;
@@ -169,6 +169,8 @@ public class Crate implements ConfigurationSerializable {
     }
 
 
-
-
+    @Override
+    public ItemStack getRenderItem() {
+        return crateItem;
+    }
 }

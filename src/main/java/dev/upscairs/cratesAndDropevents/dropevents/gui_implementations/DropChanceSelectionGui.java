@@ -8,7 +8,6 @@ import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.wrappers.NumberSelectionGui;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 

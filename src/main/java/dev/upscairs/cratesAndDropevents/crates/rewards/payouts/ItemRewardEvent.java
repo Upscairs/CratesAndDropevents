@@ -1,10 +1,9 @@
-package dev.upscairs.cratesAndDropevents.crates.rewards;
+package dev.upscairs.cratesAndDropevents.crates.rewards.payouts;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ItemRewardEvent implements CrateRewardEvent {

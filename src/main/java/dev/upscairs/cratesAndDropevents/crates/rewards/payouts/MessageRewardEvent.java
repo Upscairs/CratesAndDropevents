@@ -1,11 +1,10 @@
-package dev.upscairs.cratesAndDropevents.crates.rewards;
+package dev.upscairs.cratesAndDropevents.crates.rewards.payouts;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 public class MessageRewardEvent implements CrateRewardEvent {
 
