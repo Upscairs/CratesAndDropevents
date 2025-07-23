@@ -34,6 +34,11 @@ public class DEEditSubCommand implements SubCommand {
 
         if(!hasPermission(sender)) return true;
 
+        if(args.length < 3) {
+            sender.sendMessage(messageConfig.getColored("system.command.error.not-enough-arguments"));
+            return  true;
+        }
+
         String eventName = args[1];
         String setting = args[2];
         String value = args[3];

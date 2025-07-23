@@ -13,38 +13,45 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.List;
 
-public class DropeventListGui extends PageGui implements InventoryHolder {
+public class DropeventListGui {
 
     List<Dropevent> dropevents;
     CommandSender sender;
 
+    private PageGui gui;
+
     public DropeventListGui(CommandSender sender) {
-        super(new InteractableGui(new ItemDisplayGui()), DropeventStorage.getAll(), 0);
+        gui = new PageGui(new InteractableGui(new ItemDisplayGui()), DropeventStorage.getAll(), 0);
+        configureClickReaction();
+
         this.dropevents = DropeventStorage.getAll();
 
         this.sender = sender;
-        showPageInTitle(true);
-        setTitle("All Dropevents");
-        setHolder(this);
+        gui.showPageInTitle(true);
+        gui.setTitle("All Dropevents");
     }
 
-    @Override
-    public InventoryGui handleInvClick(int slot) {
 
-        if(slot >= 0 && slot <= 44) {
-            int selectedIndex = slot+45*getPage();
+    private void configureClickReaction() {
+        gui.onClick((slot, item, self) -> {
+            if(slot >= 0 && slot <= 44) {
+                int selectedIndex = slot+45*gui.getPage();
 
-            if(dropevents.size() <= selectedIndex) {
+                if(dropevents.size() <= selectedIndex) {
+                    return new PreventCloseGui();
+                }
+
+                Bukkit.dispatchCommand(sender, "dropevent info " + dropevents.get(selectedIndex).getName());
                 return new PreventCloseGui();
+
             }
 
-            Bukkit.dispatchCommand(sender, "dropevent info " + dropevents.get(selectedIndex).getName());
             return new PreventCloseGui();
+        });
+    }
 
-        }
-
-        return super.handleInvClick(slot);
-
+    public InventoryGui getGui() {
+        return gui;
     }
 
 

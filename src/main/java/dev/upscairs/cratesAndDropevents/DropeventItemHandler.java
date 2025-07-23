@@ -50,6 +50,7 @@ public class DropeventItemHandler implements Listener {
     private void useEventIfPossible(ItemStack usedItem, Player player) {
 
         if(!player.isSneaking()) {
+            player.sendMessage(plugin.getChatMessageConfig().getColored("dropevent.info.sneak-for-use"));
             return;
         }
         if(!plugin.getConfig().getBoolean("dropevents.normal-players.usable") && !player.isOp()) {

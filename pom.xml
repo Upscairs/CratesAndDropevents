@@ -163,7 +163,7 @@
         <dependency>
             <groupId>com.github.Upscairs</groupId>
             <artifactId>McGuiFramework</artifactId>
-            <version>v1.1.0</version>
+            <version>v1.2.2</version>
         </dependency>
 
         <!-- Adventure API -->

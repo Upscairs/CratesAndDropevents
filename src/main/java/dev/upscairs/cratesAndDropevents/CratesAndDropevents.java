@@ -13,9 +13,14 @@ import dev.upscairs.cratesAndDropevents.dropevents.commands.DropeventCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.cratesAndDropevents.helper.EventDragonDropPreventListener;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
+import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.GuiInteractionHandler;
+import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -77,7 +82,6 @@ public final class CratesAndDropevents extends JavaPlugin {
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new GuiInteractionHandler(), this);
         getServer().getPluginManager().registerEvents(new EventDragonDropPreventListener(), this);
         getServer().getPluginManager().registerEvents(new DropeventItemHandler(this), this);
         getServer().getPluginManager().registerEvents(new CratePlaceHandler(this), this);

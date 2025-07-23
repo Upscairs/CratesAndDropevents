@@ -55,10 +55,13 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.error.use-no-perm", "&4You don't have permission to use this event.&r");
         defaultMessages.put("dropevent.error.missing-id", "&4You need to specify an id to do that.&r");
 
+        defaultMessages.put("dropevent.info.sneak-for-use", "&3Sneak + right click to use this item.");
+
         defaultMessages.put("system.command.error.player-not-found", "&4There is no player with that name.&r");
         defaultMessages.put("system.command.error.invalid-number", "&4Please specify a valid number.&r");
         defaultMessages.put("system.command.error.number-range-item", "&4You can only select 1 to 64 items.&r");
         defaultMessages.put("system.command.error.not-found", "&4Command not found&r");
+        defaultMessages.put("system.command.error.not-enough-arguments", "&4Not enough arguments.&r");
 
     }
 

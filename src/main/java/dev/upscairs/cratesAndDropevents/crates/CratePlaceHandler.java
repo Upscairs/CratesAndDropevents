@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,7 +27,7 @@ public class CratePlaceHandler implements Listener {
 
         Player player = event.getPlayer();
         ItemStack usedItem = event.getItemInHand();
-
+        Location location = event.getBlock().getLocation();
 
         if (usedItem == null || !usedItem.hasItemMeta()) return;
 
@@ -52,7 +53,7 @@ public class CratePlaceHandler implements Listener {
 
         CrateOpener opener = new CrateOpener();
 
-        opener.openCrate(crate, player);
+        opener.openCrate(crate, player, location);
 
     }
 

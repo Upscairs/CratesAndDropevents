@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class DropeventDropsGui extends PageGui implements InventoryHolder {
+public class DropeventDropsGui {
 
     private Dropevent dropevent;
     private CommandSender sender;
@@ -32,31 +32,34 @@ public class DropeventDropsGui extends PageGui implements InventoryHolder {
 
     private int unusedChance;
 
+    private PageGui gui;
+
     public DropeventDropsGui(Dropevent dropevent, CommandSender sender, Plugin plugin) {
-        super(new InteractableGui(new ItemDisplayGui()),
+        gui = new PageGui(new InteractableGui(new ItemDisplayGui()),
                 dropevent.getDrops().entrySet().stream()
                     .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .map(Map.Entry::getKey)
                     .map(ListableItemStack::new)
                     .toList(),
                 0);
+        configureClickReaction();
 
         this.dropevent = dropevent;
         this.sender = sender;
         this.plugin = plugin;
 
-        showPageInTitle(true);
-        setTitle("Loot Pool of " + dropevent.getName());
+        gui.showPageInTitle(true);
+        gui.setTitle("Loot Pool of " + dropevent.getName());
 
-        setHolder(this);
         placeItems();
         writeItemChances();
 
+
     }
 
-    public void placeItems() {
+    private void placeItems() {
 
-        super.placeItems();
+        gui.placeItems();
 
         ItemMeta meta;
 
@@ -64,13 +67,15 @@ public class DropeventDropsGui extends PageGui implements InventoryHolder {
         meta = backItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("To edit window", "#AAAAAA").decoration(TextDecoration.BOLD, true));
         backItem.setItemMeta(meta);
-        setItem(46, backItem);
+        gui.setItem(46, backItem);
 
         ItemStack newDropItem = new ItemStack(Material.CHEST_MINECART);
         meta = newDropItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("Add drop", "#FFAA00").decoration(TextDecoration.BOLD, true));
         newDropItem.setItemMeta(meta);
-        setItem(49, newDropItem);
+        gui.setItem(49, newDropItem);
+
+
     }
 
 
@@ -120,69 +125,72 @@ public class DropeventDropsGui extends PageGui implements InventoryHolder {
         }
 
 
-        setListedObjects(updated);
+        gui.setListedObjects(updated);
     }
 
-    @Override
-    public InventoryGui handleInvClick(int slot) {
 
-        //Determine, which item was clicked on and if there is the non-clickable barrier item
-        if(slot >= 0 && slot <= 44) {
-            int selectedIndex = slot+45*getPage();
+    private void configureClickReaction() {
+        gui.onClick((slot, item, self) -> {
 
-            int lastAvailableIndex = getListedObjects().size() - 1;
+            //Determine, which item was clicked on and if there is the non-clickable barrier item
+            if(slot >= 0 && slot <= 44) {
+                int selectedIndex = slot+45*gui.getPage();
 
-            if(unusedChance > 0f) {
-                lastAvailableIndex--;
+                int lastAvailableIndex = gui.getListedObjects().size() - 1;
+
+                if(unusedChance > 0f) {
+                    lastAvailableIndex--;
+                }
+
+                if(lastAvailableIndex < selectedIndex) {
+                    return new PreventCloseGui();
+                }
+
+                List<ListableGuiObject> listedObjects = gui.getListedObjects();
+                ItemStack drop = listedObjects.get(selectedIndex).getRenderItem().clone();
+
+                List<Component> lore = drop.lore();
+                lore.remove(lore.size()-1);
+                drop.lore(lore);
+
+
+                return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin).getGui();
+
             }
 
-            if(lastAvailableIndex < selectedIndex) {
-                return new PreventCloseGui();
+            //Return to DropeventEditGui
+            if(slot == 46) {
+                return new DropeventEditGui(dropevent, false, sender, plugin).getGui();
+            }
+            //Add a new drop to the Dropevent
+            else if(slot == 49) {
+
+                ItemStack newItem = new ItemStack(Material.STONE);
+                ItemMeta meta = newItem.getItemMeta();
+                meta.displayName(Component.text()
+                        .content("Stone " + (dropevent.getDrops().size()+1))
+                        .decoration(TextDecoration.ITALIC, false)
+                        .build());
+                newItem.setItemMeta(meta);
+
+                if(unusedChance > 0f) {
+                    dropevent.setItemDropChance(newItem, unusedChance);
+                }
+                else {
+                    dropevent.setItemDropChance(newItem, 0);
+                }
+
+                DropeventStorage.saveDropevent(dropevent);
+
+                return new DropeventDropsGui(dropevent, sender, plugin).getGui();
             }
 
-            List<ListableGuiObject> listedObjects = getListedObjects();
-            ItemStack drop = listedObjects.get(selectedIndex).getRenderItem().clone();
+            return gui;
+        });
+    }
 
-            List<Component> lore = drop.lore();
-            lore.remove(lore.size()-1);
-            drop.lore(lore);
-
-
-            return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin);
-
-        }
-
-        //Return to DropeventEditGui
-        if(slot == 46) {
-            return new DropeventEditGui(dropevent, false, sender, plugin);
-        }
-        //Add a new drop to the Dropevent
-        else if(slot == 49) {
-
-            ItemStack newItem = new ItemStack(Material.STONE);
-            ItemMeta meta = newItem.getItemMeta();
-            meta.displayName(Component.text()
-                    .content("Stone " + (dropevent.getDrops().size()+1))
-                    .decoration(TextDecoration.ITALIC, false)
-                    .build());
-            newItem.setItemMeta(meta);
-
-            if(unusedChance > 0f) {
-
-
-                dropevent.setItemDropChance(newItem, unusedChance);
-            }
-            else {
-                dropevent.setItemDropChance(newItem, 0);
-            }
-
-            DropeventStorage.saveDropevent(dropevent);
-            return new DropeventDropsGui(dropevent, sender, plugin);
-        }
-
-
-        return super.handleInvClick(slot);
-
+    public InventoryGui getGui() {
+        return gui;
     }
 
 }

@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -21,7 +22,7 @@ public class CommandRewardEvent implements CrateRewardEvent {
     }
 
     @Override
-    public CompletableFuture<Void> execute(Player player) {
+    public CompletableFuture<Void> execute(Player player, Location location) {
         String resolved = command.replace("{player}", player.getName());
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), resolved));
         return CompletableFuture.completedFuture(null);

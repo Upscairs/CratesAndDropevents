@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +29,7 @@ public class SoundRewardEvent implements CrateRewardEvent {
     }
 
     @Override
-    public CompletableFuture<Void> execute(Player player) {
+    public CompletableFuture<Void> execute(Player player, Location location) {
         player.playSound(player.getLocation(), soundName, volume, pitch);
         return CompletableFuture.completedFuture(null);
     }

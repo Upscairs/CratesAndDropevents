@@ -4,45 +4,56 @@ import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
+import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import dev.upscairs.mcGuiFramework.utility.PlayerInventoryClickReacting;
 import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-public class SingleDropGui extends InteractableGui implements InventoryHolder, PlayerInventoryClickReacting {
+import java.util.Map;
+
+public class SingleDropGui {
 
     private Dropevent dropevent;
-    private ItemStack item;
+    private ItemStack dropItem;
     private boolean itemSelection;
     private CommandSender sender;
     private Plugin plugin;
     private int unusedChance;
 
-    public SingleDropGui(Dropevent dropevent, ItemStack item, boolean itemSelection, int unusedChance, CommandSender sender, Plugin plugin) {
+    private int currentChance;
 
-        super(new ItemDisplayGui());
+    private InteractableGui gui;
+
+    public SingleDropGui(Dropevent dropevent, ItemStack dropItem, boolean itemSelection, int unusedChance, CommandSender sender, Plugin plugin) {
+
+        gui = new InteractableGui(new ItemDisplayGui());
+        configureClickReaction();
 
         this.dropevent = dropevent;
-        this.item = item;
+        this.dropItem = dropItem;
         this.itemSelection = itemSelection;
         this.sender = sender;
         this.plugin = plugin;
         this.unusedChance = unusedChance;
 
-        setHolder(this);
-        setSize(54);
-        setTitle("Configure Loot for " + dropevent.getName());
+        currentChance = dropevent.getDrops().entrySet().stream()
+                .filter(e -> e.getKey().isSimilar(dropItem))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(0);
+
+        gui.setSize(54);
+        gui.setTitle("Configure Loot for " + dropevent.getName());
 
         placeItems();
+        configureClickReaction();
     }
 
-    @Override
     public void placeItems() {
 
         ItemMeta meta;
@@ -51,22 +62,23 @@ public class SingleDropGui extends InteractableGui implements InventoryHolder, P
         meta = backItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("To the overview", "#AAAAAA").decoration(TextDecoration.BOLD, true));
         backItem.setItemMeta(meta);
-        setItem(45, backItem);
+        gui.setItem(45, backItem);
 
 
-        setItem(13, generateDropItem());
+        gui.setItem(13, generateDropItem());
+
 
         ItemStack chanceItem = new ItemStack(Material.CHEST);
         meta = chanceItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Probability: " + (float)(dropevent.getDrops().get(item))/10f + "%", "#FFAA00").decoration(TextDecoration.BOLD, true));
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Probability: " + currentChance/10 + "%", "#FFAA00").decoration(TextDecoration.BOLD, true));
         chanceItem.setItemMeta(meta);
-        setItem(29, chanceItem);
+        gui.setItem(29, chanceItem);
 
         ItemStack deleteItem = new ItemStack(Material.BARRIER);
         meta = deleteItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("Delete Drop", "#FF5555").decoration(TextDecoration.BOLD, true));
         deleteItem.setItemMeta(meta);
-        setItem(33, deleteItem);
+        gui.setItem(33, deleteItem);
 
 
     }
@@ -84,7 +96,7 @@ public class SingleDropGui extends InteractableGui implements InventoryHolder, P
             dropItem.setItemMeta(meta);
         }
         else {
-            dropItem = item.clone();
+            dropItem = this.dropItem.clone();
             meta = dropItem.getItemMeta();
             meta.displayName(InvGuiUtils.generateDefaultTextComponent("Click to configure drop", "#AA00AA").decoration(TextDecoration.BOLD, true));
             dropItem.setItemMeta(meta);
@@ -94,38 +106,41 @@ public class SingleDropGui extends InteractableGui implements InventoryHolder, P
 
     }
 
-    @Override
-    public InventoryGui handleInvClick(int slot) {
+    private void configureClickReaction() {
+        gui.onClick((slot, item, self) -> {
 
+            if(slot < 54) {
+                switch (slot) {
+                    case 13:
+                        return new SingleDropGui(dropevent, dropItem, !itemSelection, unusedChance, sender, plugin).getGui();
+                    case 29:
+                        return new DropChanceSelectionGui(dropevent, dropItem, currentChance, unusedChance, sender, plugin).getGui();
+                    case 33:
+                        dropevent.removeDrop(dropItem);
+                        DropeventStorage.saveDropevent(dropevent);
+                        return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+                    case 45:
+                        return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+                }
 
-        switch (slot) {
-            case 13: return new SingleDropGui(dropevent, item, !itemSelection, unusedChance, sender, plugin);
-            case 29: return new DropChanceSelectionGui(dropevent, item, dropevent.getDrops().get(item), unusedChance, sender, plugin);
-            case 33:
-                dropevent.removeDrop(item);
-                DropeventStorage.saveDropevent(dropevent);
-                return new DropeventDropsGui(dropevent, sender, plugin);
-            case 45: return new DropeventDropsGui(dropevent, sender, plugin);
-        }
+                return new PreventCloseGui();
 
+            }
+            if(slot >= 54 && itemSelection) {
 
+                dropevent.removeDrop(dropItem);
+                dropevent.setItemDropChance(item, currentChance);
 
-        return super.handleInvClick(slot);
+                return new SingleDropGui(dropevent, item, false, unusedChance, sender, plugin).getGui();
+            }
 
+            return new PreventCloseGui();
+
+        });
     }
 
-    @Override
-    public PlayerInventoryClickReacting onItemClick(ItemStack selectedItem) {
-
-        Integer itemProb = dropevent.getDrops().get(item);
-
-        dropevent.removeDrop(item);
-        dropevent.setItemDropChance(selectedItem, itemProb);
-
-        return new SingleDropGui(dropevent, selectedItem, false, unusedChance, sender, plugin);
-
-
-
+    public InventoryGui getGui() {
+        return gui;
     }
 
 

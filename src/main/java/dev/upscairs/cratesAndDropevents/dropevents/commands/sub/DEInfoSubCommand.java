@@ -50,7 +50,7 @@ public class DEInfoSubCommand implements SubCommand {
         }
 
         DropeventEditGui editGui = new DropeventEditGui(event, false, sender, plugin);
-        p.openInventory(editGui.getInventory());
+        p.openInventory(editGui.getGui().getInventory());
         return true;
     }
 

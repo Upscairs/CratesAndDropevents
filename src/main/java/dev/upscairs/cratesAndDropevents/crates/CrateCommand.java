@@ -3,6 +3,7 @@ package dev.upscairs.cratesAndDropevents.crates;
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.rewards.*;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -48,10 +49,17 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
 
             List<CrateRewardEvent> rewards = new ArrayList<>();
 
-            rewards.add(new CommandRewardEvent("/test", plugin));
+            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("Dropping an item and waiting 2 secs..", "#FFFFFF")));
+            rewards.add(new ItemRewardEvent(new ItemStack(Material.DIAMOND)));
             rewards.add(new DelayRewardEvent(40, plugin));
+            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("Now playing a sound. Waiting 4 secs for drama", "#FFFFFF")));
+            rewards.add(new SoundRewardEvent("minecraft:item.totem.use", 1, 2));
+            rewards.add(new DelayRewardEvent(80, plugin));
+            rewards.add(new CommandRewardEvent("say Now executing /say command as console.", plugin));
+            rewards.add(new DelayRewardEvent(80, plugin));
+            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("And finally dropping an item again", "#FFFFFF")));
             rewards.add(new ItemRewardEvent(new ItemStack(Material.ACACIA_BOAT)));
-            rewards.add(new SoundRewardEvent("hallo", 1, 1));
+
 
             CrateReward crateReward = new CrateReward(args[1], rewards, plugin);
 
@@ -59,6 +67,8 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
             ((CratesAndDropevents) plugin).getCrateRewardStorage().saveReward(crateReward);
 
             crate.addReward(crateReward, 1000);
+
+            System.out.println(crate.getName());
 
             ((CratesAndDropevents) plugin).getCrateStorage().saveCrate(crate);
 

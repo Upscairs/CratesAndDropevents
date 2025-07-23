@@ -1,6 +1,8 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
@@ -31,12 +33,12 @@ public class CrateReward implements ConfigurationSerializable {
     }
 
 
-    public CompletableFuture<Void> execute(Player player) {
+    public CompletableFuture<Void> execute(Player player, Location location) {
 
         CompletableFuture<Void> chain = CompletableFuture.completedFuture(null);
 
         for (CrateRewardEvent element : sequence) {
-            chain = chain.thenCompose(v -> element.execute(player));
+            chain = chain.thenCompose(v -> element.execute(player, location));
         }
 
         return chain;
@@ -61,7 +63,11 @@ public class CrateReward implements ConfigurationSerializable {
             if (evt instanceof CommandRewardEvent cre) {
                 m.put("type", "command");
                 m.put("command", cre.getCommand());
-            } else if (evt instanceof DelayRewardEvent dre) {
+            } else if (evt instanceof MessageRewardEvent mre) {
+                m.put("type", "message");
+                m.put("message", LegacyComponentSerializer.legacySection().serialize(mre.getMessage()));
+            }
+            else if (evt instanceof DelayRewardEvent dre) {
                 m.put("type", "delay");
                 m.put("ticks", dre.getTicks());
             } else if (evt instanceof ItemRewardEvent ire) {
@@ -101,6 +107,9 @@ public class CrateReward implements ConfigurationSerializable {
             switch (type) {
                 case "command":
                     seq.add(new CommandRewardEvent((String) m.get("command"), plugin));
+                    break;
+                case "message":
+                    seq.add(new MessageRewardEvent(LegacyComponentSerializer.legacySection().deserialize((String) m.get("message"))));
                     break;
                 case "delay":
                     seq.add(new DelayRewardEvent(((Number) m.get("ticks")).longValue(), plugin));

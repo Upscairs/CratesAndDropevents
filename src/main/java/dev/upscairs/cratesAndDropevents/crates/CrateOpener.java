@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates;
 
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Random;
 
 public class CrateOpener {
 
-    public void openCrate(Crate crate, Player player) {
+    public void openCrate(Crate crate, Player player, Location location) {
 
         List<Map.Entry<CrateReward, Integer>> rewards = new ArrayList<>(crate.getRewards().entrySet());
 
@@ -23,7 +24,7 @@ public class CrateOpener {
             if (pickedNumber >= weight) {
                 pickedNumber -= weight;
             } else {
-                reward.getKey().execute(player);
+                reward.getKey().execute(player, location);
                 return;
             }
 

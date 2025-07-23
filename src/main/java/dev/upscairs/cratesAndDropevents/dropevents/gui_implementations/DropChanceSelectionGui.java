@@ -4,6 +4,7 @@ import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
+import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.wrappers.NumberSelectionGui;
 import org.bukkit.command.CommandSender;
@@ -11,7 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-public class DropChanceSelectionGui extends NumberSelectionGui implements InventoryHolder {
+public class DropChanceSelectionGui {
 
     private Dropevent dropevent;
     private ItemStack drop;
@@ -19,9 +20,12 @@ public class DropChanceSelectionGui extends NumberSelectionGui implements Invent
     private CommandSender sender;
     private Plugin plugin;
 
+    private NumberSelectionGui gui;
+
     public DropChanceSelectionGui(Dropevent dropevent, ItemStack changedDrop, int dropChance, int unusedChance, CommandSender sender, Plugin plugin) {
 
-        super(new InteractableGui(new ItemDisplayGui()), dropChance, 0, dropChance+unusedChance, sender);
+        gui = new NumberSelectionGui(new InteractableGui(new ItemDisplayGui()), dropChance, 0, dropChance+unusedChance, sender);
+        configureClickReaction();
 
         this.dropevent = dropevent;
         this.drop = changedDrop;
@@ -29,32 +33,27 @@ public class DropChanceSelectionGui extends NumberSelectionGui implements Invent
         this.sender = sender;
         this.plugin = plugin;
 
-        setHolder(this);
-        setTitle("Drop chance in ‰");
+        gui.setTitle("Drop chance in ‰");
 
     }
 
-    /**
-     *
-     * Saves and throws back to DropeventDropsGui or aborts and throws back to SingleDropGui
-     *
-     * @param slot
-     * @return
-     */
-    @Override
-    public InventoryGui handleInvClick(int slot) {
+    private void configureClickReaction() {
+        gui.onClick((slot, item, self) -> {
+            if(slot == 30) {
+                dropevent.setItemDropChance(drop, gui.getNumber());
+                DropeventStorage.saveDropevent(dropevent);
+                return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+            }
+            else if(slot == 32) {
+                return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin).getGui();
+            }
 
-        if(slot == 30) {
-            dropevent.setItemDropChance(drop, getNumber());
-            DropeventStorage.saveDropevent(dropevent);
-            return new DropeventDropsGui(dropevent, sender, plugin);
-        }
-        else if(slot == 32) {
-            return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin);
-        }
+            return new PreventCloseGui();
+        });
+    }
 
-        return super.handleInvClick(slot);
-
+    public InventoryGui getGui() {
+        return gui;
     }
 
 

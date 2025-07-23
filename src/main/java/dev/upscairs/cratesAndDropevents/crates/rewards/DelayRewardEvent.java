@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -21,7 +22,7 @@ public class DelayRewardEvent implements CrateRewardEvent {
     }
 
     @Override
-    public CompletableFuture<Void> execute(Player player) {
+    public CompletableFuture<Void> execute(Player player, Location location) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         Bukkit.getScheduler().runTaskLater(plugin, () -> future.complete(null), ticks);
         return future;
