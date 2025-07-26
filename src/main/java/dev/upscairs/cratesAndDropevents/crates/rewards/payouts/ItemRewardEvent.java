@@ -1,14 +1,17 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards.payouts;
 
+import dev.upscairs.cratesAndDropevents.helper.EditMode;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.concurrent.CompletableFuture;
 
 public class ItemRewardEvent implements CrateRewardEvent {
 
-    private final ItemStack item;
+    private ItemStack item;
 
     public ItemRewardEvent(ItemStack item) {
         this.item = item;
@@ -18,19 +21,28 @@ public class ItemRewardEvent implements CrateRewardEvent {
         return item;
     }
 
+    public void setItem(ItemStack item) {
+        this.item = item;
+    }
+
     @Override
     public CompletableFuture<Void> execute(Player player, Location location) {
-
-        /*
-        Map<Integer, ItemStack> leftover = player.getInventory().addItem(item.clone());
-
-        for (ItemStack left : leftover.values()) {
-            player.getWorld().dropItemNaturally(player.getLocation(), left);
-        }*/
 
         player.getWorld().dropItemNaturally(location, item.clone());
 
         return CompletableFuture.completedFuture(null);
+    }
+
+    public ItemStack getRenderItem() {
+        ItemStack renderItem = item.clone();
+        ItemMeta meta = renderItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Drop " + item.getI18NDisplayName(), "#00AAAA"));
+        renderItem.setItemMeta(meta);
+        return renderItem;
+    }
+
+    public EditMode getAssociatedEditMode() {
+        return EditMode.EDIT_ITEM_EVENT;
     }
 
 }

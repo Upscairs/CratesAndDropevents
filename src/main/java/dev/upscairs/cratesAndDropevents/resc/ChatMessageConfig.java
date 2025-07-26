@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.configs;
+package dev.upscairs.cratesAndDropevents.resc;
 
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -26,6 +26,25 @@ public class ChatMessageConfig {
     }
 
     private void setupDefaults() {
+
+        defaultMessages.put("crate.error.non-skull-item-selected", "&4You have to select a skull item!&r");
+        defaultMessages.put("crate.error.name-not-found", "&4Crate not found!&r");
+        defaultMessages.put("crate.error.already-exists", "&4A crate with that name already exists!&r");
+        defaultMessages.put("crate.error.missing-name", "&4You must specify a name.&r");
+        defaultMessages.put("crate.error.missing-url", "&4You must specify a url.&r");
+        defaultMessages.put("crate.error.missing-player", "&4You must specify a player.&r");
+        defaultMessages.put("crate.error.player-not-found", "&4Player not found.&r");
+
+        defaultMessages.put("crate.success.created", "&2Crate has been created.&r");
+        defaultMessages.put("crate.success.value-updated", "&2Value has been updated.&r");
+        defaultMessages.put("crate.success.skull-updated", "&2Crate texture has been updated.&r");
+        defaultMessages.put("crate.success.deleted",  "&2Crate has been deleted.&r");
+
+        defaultMessages.put("crate.info.type-sound", "&3Type the path of the desired sound. If you want a different volume or pitch then 1, use the format &f<path> <volume> <pitch> (seperated by spaces. Use /crates cancel or the button to cancel&r");
+        defaultMessages.put("crate.info.type-command", "&3Type the desired command without &f/&3. Use /crates cancel or the button to cancel&r");
+        defaultMessages.put("crate.info.type-message", "&3Type the desired message. Use /crates cancel or the button to cancel&r");
+        defaultMessages.put("crate.info.type-canceled", "&7Canceled&r");
+
         defaultMessages.put("dropevent.broadcast.local.countdown", "&5A dropevent starts here in %ts.&r");
         defaultMessages.put("dropevent.broadcast.local.start", "&5The dropevent started.&r");
         defaultMessages.put("dropevent.broadcast.local.end", "&5The dropevent has ended.&r");

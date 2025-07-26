@@ -1,27 +1,23 @@
 package dev.upscairs.cratesAndDropevents.crates.commands;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
-import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.commands.sub.*;
-import dev.upscairs.cratesAndDropevents.crates.management.Crate;
-import dev.upscairs.cratesAndDropevents.crates.rewards.*;
-import dev.upscairs.cratesAndDropevents.crates.rewards.payouts.*;
-import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
-import dev.upscairs.cratesAndDropevents.dropevents.commands.sub.*;
-import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import org.bukkit.Material;
+import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
+import dev.upscairs.cratesAndDropevents.helper.SubCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CratesCommand implements CommandExecutor, TabCompleter {
 
@@ -34,13 +30,16 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
     }
 
     public void registerCommands() {
-        CratesAndDropevents c = (CratesAndDropevents) plugin;
+        CratesAndDropevents p = (CratesAndDropevents) plugin;
 
-        register(new CrCreateSubCommand());
-        register(new CrEditSubCommand(c));
-        register(new CrGiveSubCommand());
-        register(new CrInfoSubCommand());
+        register(new CrCreateSubCommand(p));
+        register(new CrUrlSubCommand(p));
+        register(new CrGiveSubCommand(p));
+        register(new CrInfoSubCommand(p));
         register(new CrListSubCommand());
+        register(new CrRewardsSubCommand(p));
+        register(new CrCancelSubCommand(p));
+        register(new CrDeleteSubCommand(p));
     }
 
     public void register(SubCommand cmd) {
@@ -110,7 +109,34 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return null;
+
+        if(!sender.isOp()) return Arrays.asList();
+
+        if(args.length == 1) {
+            return Arrays.asList("cancel", "create", "delete", "give", "info", "list", "rewards", "url");
+        }
+
+        List<String> allCrates = CrateStorage.getCrateIds();
+        List<String> onlinePlayers = Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+
+        if(args.length == 2) {
+
+            switch(args[0]) {
+                case "delete", "info", "rewards", "url" -> {
+                    return allCrates;
+                }
+                case "give" -> {
+                    return onlinePlayers;
+                }
+            }
+        }
+
+        if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            return allCrates;
+        }
+
+
+        return Arrays.asList();
     }
 
 

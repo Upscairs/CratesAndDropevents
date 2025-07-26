@@ -1,15 +1,16 @@
 package dev.upscairs.cratesAndDropevents;
 
-import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.crates.management.DropeventItemHandler;
+import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.crates.commands.CratesCommand;
 import dev.upscairs.cratesAndDropevents.crates.management.CratePlaceHandler;
-import dev.upscairs.cratesAndDropevents.crates.management.CrateStorage;
+import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
-import dev.upscairs.cratesAndDropevents.crates.rewards.CrateRewardStorage;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.dropevents.commands.DropeventCommand;
-import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
+import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.cratesAndDropevents.helper.EventDragonDropPreventListener;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
 import org.bukkit.NamespacedKey;
@@ -28,8 +29,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
     private static CratesAndDropevents instance;
 
-    private CrateStorage crateStorage;
-    private CrateRewardStorage crateRewardStorage;
 
 
     @Override
@@ -43,7 +42,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
 
         DropeventStorage.init(this);
-        CrateRewardStorage.init(this);
         CrateStorage.init(this);
 
 
@@ -70,12 +68,16 @@ public final class CratesAndDropevents extends JavaPlugin {
         getCommand("crates").setExecutor(new CratesCommand(this));
         getCommand("crates").setTabCompleter(new CratesCommand(this));
 
+        getCommand("crate").setExecutor(new CratesCommand(this));
+        getCommand("crate").setTabCompleter(new CratesCommand(this));
+
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new EventDragonDropPreventListener(), this);
         getServer().getPluginManager().registerEvents(new DropeventItemHandler(this), this);
         getServer().getPluginManager().registerEvents(new CratePlaceHandler(this), this);
+        getServer().getPluginManager().registerEvents(new ChatMessageInputHandler(), this);
     }
 
     private void registerConfigs() {
@@ -113,14 +115,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
     public static CratesAndDropevents getInstance() {
         return instance;
-    }
-
-    public CrateStorage getCrateStorage() {
-        return crateStorage;
-    }
-
-    public CrateRewardStorage getCrateRewardStorage() {
-        return crateRewardStorage;
     }
 
 }

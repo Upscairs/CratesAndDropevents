@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.management;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,7 +35,7 @@ public class CratePlaceHandler implements Listener {
         ItemMeta meta = usedItem.getItemMeta();
         String crateName = meta.getPersistentDataContainer().get(((CratesAndDropevents) plugin).CRATE_KEY, PersistentDataType.STRING);
 
-        Crate crate = ((CratesAndDropevents) plugin).getCrateStorage().getCrateById(crateName);
+        Crate crate = CrateStorage.getCrateById(crateName);
 
         if(crate == null) return;
 

@@ -1,9 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
-import dev.upscairs.cratesAndDropevents.crates.management.CrateStorage;
-import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
-import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
+import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
@@ -14,14 +12,14 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class CratesListGui {
+public class CrateListGui {
 
     List<Crate> crates;
     CommandSender sender;
 
     private PageGui gui;
 
-    public CratesListGui(CommandSender sender) {
+    public CrateListGui(CommandSender sender) {
         this.crates = CrateStorage.getAll();
 
         gui = new PageGui(new InteractableGui(new ItemDisplayGui()), crates, 0);

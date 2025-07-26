@@ -9,3 +9,5 @@ commands:
     ussage: /<command>
   crates:
     ussage: /<command>
+  crate:
+    ussage: /<command>

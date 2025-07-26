@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.dropevents.commands;
+package dev.upscairs.cratesAndDropevents.helper;
 
 import org.bukkit.command.CommandSender;
 

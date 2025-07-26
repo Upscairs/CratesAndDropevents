@@ -2,34 +2,35 @@ package dev.upscairs.cratesAndDropevents.crates.rewards;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.rewards.payouts.*;
+import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @SerializableAs("CrateReward")
-public class CrateReward implements ConfigurationSerializable {
+public class CrateReward implements ConfigurationSerializable, ListableGuiObject {
 
-    private String name;
     private List<CrateRewardEvent> sequence;
 
     private Plugin plugin;
 
-    public CrateReward(String name, Plugin plugin) {
-        this.name = name;
+    public CrateReward(Plugin plugin) {
         this.plugin = plugin;
-        this.sequence = Collections.emptyList();
+        this.sequence = new ArrayList<>();
     }
 
-    public CrateReward(String name, List<CrateRewardEvent> sequence, Plugin plugin) {
-        this.name = name;
-        this.sequence = Collections.unmodifiableList(sequence);
+    public CrateReward(List<CrateRewardEvent> sequence, Plugin plugin) {
+        this.sequence = new ArrayList<>(sequence);
         this.plugin = plugin;
     }
 
@@ -49,14 +50,13 @@ public class CrateReward implements ConfigurationSerializable {
         return sequence;
     }
 
-    public String getName() {
-        return name;
+    public void addEvent(CrateRewardEvent event) {
+        sequence.add(event);
     }
 
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> out = new LinkedHashMap<>();
-        out.put("name", name);
         List<Map<String, Object>> events = new ArrayList<>();
 
         for (CrateRewardEvent evt : sequence) {
@@ -86,15 +86,9 @@ public class CrateReward implements ConfigurationSerializable {
         return out;
     }
 
-    @SuppressWarnings("unchecked")
     public static CrateReward deserialize(Map<String, Object> map) {
 
         Plugin plugin = CratesAndDropevents.getInstance();
-
-        String id = (String) map.get("name");
-        if (id == null) {
-            throw new IllegalArgumentException("Missing name for CrateReward");
-        }
 
         Object eventsObj = map.get("events");
         if (!(eventsObj instanceof List<?> rawList)) {
@@ -113,7 +107,7 @@ public class CrateReward implements ConfigurationSerializable {
                     seq.add(new MessageRewardEvent(LegacyComponentSerializer.legacySection().deserialize((String) m.get("message"))));
                     break;
                 case "delay":
-                    seq.add(new DelayRewardEvent(((Number) m.get("ticks")).longValue(), plugin));
+                    seq.add(new DelayRewardEvent(((Number) m.get("ticks")).intValue(), plugin));
                     break;
                 case "item":
                     seq.add(new ItemRewardEvent((ItemStack) m.get("item")));
@@ -128,8 +122,69 @@ public class CrateReward implements ConfigurationSerializable {
             }
         }
 
-        return new CrateReward(id, seq, plugin);
+        return new CrateReward(seq, plugin);
     }
 
 
+    @Override
+    public ItemStack getRenderItem() {
+
+        ItemRewardEvent irw = null;
+        CommandRewardEvent crw = null;
+        MessageRewardEvent mrw = null;
+        SoundRewardEvent sre = null;
+
+        int moreEvents = sequence.size() - 1;
+
+        for(CrateRewardEvent evt : sequence.reversed()) {
+            if(evt instanceof ItemRewardEvent) {
+                irw = (ItemRewardEvent) evt;
+            }
+            else if(evt instanceof CommandRewardEvent) {
+                crw = (CommandRewardEvent) evt;
+            }
+            else if(evt instanceof MessageRewardEvent) {
+                mrw = (MessageRewardEvent) evt;
+            }
+            else if(evt instanceof SoundRewardEvent) {
+                sre = (SoundRewardEvent) evt;
+            }
+
+        }
+
+        ItemStack item = new ItemStack(Material.SCAFFOLDING);
+        String name = "";
+
+        if(irw != null) {
+            item = irw.getItem().clone();
+            name = "Drop " + irw.getItem().getI18NDisplayName();
+        }
+        else if(crw != null) {
+            item = new ItemStack(Material.COMMAND_BLOCK);
+            name = "Run command";
+        }
+        else if(mrw != null) {
+            item = new ItemStack(Material.PAPER);
+            name = "Send message";
+        }
+        else if(sre != null) {
+            item = new ItemStack(Material.NOTE_BLOCK);
+            name = "Play sound";
+        }
+
+
+        if(name.isEmpty()) {
+            name = "Empty";
+        }
+        else {
+            if(moreEvents > 0) name += " + " + moreEvents + " more";
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent(name, "#FFAA00"));
+
+        item.setItemMeta(meta);
+        return item;
+
+    }
 }

@@ -1,7 +1,7 @@
 package dev.upscairs.cratesAndDropevents.dropevents.management;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
-import dev.upscairs.cratesAndDropevents.configs.ChatMessageConfig;
+import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.BroadcastService;
 import net.kyori.adventure.text.Component;

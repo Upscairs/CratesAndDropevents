@@ -1,7 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.commands.sub;
 
-import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CratesListGui;
-import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
+import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
+import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -25,7 +25,7 @@ public class CrListSubCommand implements SubCommand {
         if(!hasPermission(sender)) return true;
         if(!(sender instanceof Player p)) return true;
 
-        CratesListGui cratesListGui = new CratesListGui(sender);
+        CrateListGui cratesListGui = new CrateListGui(sender);
         p.openInventory(cratesListGui.getGui().getInventory());
         return true;
     }

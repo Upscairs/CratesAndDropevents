@@ -1,5 +1,6 @@
-package dev.upscairs.cratesAndDropevents.crates.management;
+package dev.upscairs.cratesAndDropevents.resc;
 
+import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -57,6 +58,7 @@ public class CrateStorage {
 
         for (String key : section.getKeys(false)) {
             Object obj = config.get("crates." + key);
+
             if (obj instanceof Crate) {
                 list.add((Crate) obj);
             }

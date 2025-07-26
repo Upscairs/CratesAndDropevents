@@ -8,6 +8,7 @@ import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -85,6 +86,16 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
     }
 
     public void setCrateItem(ItemStack crateItem) {
+
+        if(crateItem.getType() != Material.PLAYER_HEAD) {
+            return;
+        }
+
+        crateItem.setAmount(1);
+        ItemMeta meta = crateItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent(name, "#FFAA00"));
+        crateItem.setItemMeta(meta);
+
         this.crateItem = crateItem;
         addCrateFlag();
     }
@@ -97,7 +108,7 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
 
         try {
             textures.setSkin(new URL(url));
-        } catch (MalformedURLException var6) {
+        } catch (MalformedURLException ex) {
             Bukkit.getLogger().warning("Head Database seems to be down");
             return false;
         }
@@ -116,6 +127,10 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         this.rewards = rewards;
     }
 
+    public void setRewardChance(CrateReward reward, int chance) {
+        rewards.put(reward, chance);
+    }
+
     public void addReward(CrateReward reward, int chance) {
         rewards.put(reward, chance);
     }
@@ -128,6 +143,17 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         return name;
     }
 
+    public int getUnusedChance() {
+
+        int summedChance = 0;
+
+        for (Map.Entry<CrateReward, Integer> entry : rewards.entrySet()) {
+            summedChance += entry.getValue();
+        }
+
+        return 1000 - summedChance;
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> map = new LinkedHashMap<>();
@@ -137,7 +163,7 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         List<Map<String, Object>> rewardsList = new ArrayList<>();
         for (Map.Entry<CrateReward, Integer> entry : rewards.entrySet()) {
             Map<String, Object> rewardEntry = new LinkedHashMap<>();
-            rewardEntry.put("reward", entry.getKey().getName());
+            rewardEntry.put("reward", entry.getKey());
             rewardEntry.put("chance", entry.getValue());
             rewardsList.add(rewardEntry);
         }
@@ -147,7 +173,6 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
     }
 
     public static Crate deserialize(Map<String, Object> map) {
-
         Plugin plugin = CratesAndDropevents.getInstance();
 
         String name = (String) map.get("name");
@@ -159,7 +184,17 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
             for (Object element : list) {
                 if (!(element instanceof Map<?, ?> rewardMap)) continue;
 
-                CrateReward reward = ((CratesAndDropevents) plugin).getCrateRewardStorage().getRewardById(rewardMap.get("reward").toString());
+                Object rawReward = rewardMap.get("reward");
+                CrateReward reward;
+                if (rawReward instanceof CrateReward cr) {
+                    reward = cr;
+                } else if (rawReward instanceof Map<?, ?> serializedReward) {
+                    reward = (CrateReward) ConfigurationSerialization
+                            .deserializeObject((Map<String, Object>) serializedReward);
+                } else {
+                    continue;
+                }
+
                 Number chanceNum = (Number) rewardMap.get("chance");
                 crate.addReward(reward, chanceNum.intValue());
             }

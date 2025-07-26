@@ -1,6 +1,6 @@
 package dev.upscairs.cratesAndDropevents.dropevents.commands.sub;
 
-import dev.upscairs.cratesAndDropevents.dropevents.commands.SubCommand;
+import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.gui_implementations.DropeventListGui;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

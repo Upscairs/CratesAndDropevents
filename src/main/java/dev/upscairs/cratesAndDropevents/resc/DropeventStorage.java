@@ -1,4 +1,4 @@
-package dev.upscairs.cratesAndDropevents.dropevents.management;
+package dev.upscairs.cratesAndDropevents.resc;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import org.bukkit.configuration.ConfigurationSection;

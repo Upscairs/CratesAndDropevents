@@ -1,7 +1,7 @@
 package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
-import dev.upscairs.cratesAndDropevents.dropevents.management.DropeventStorage;
+import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
