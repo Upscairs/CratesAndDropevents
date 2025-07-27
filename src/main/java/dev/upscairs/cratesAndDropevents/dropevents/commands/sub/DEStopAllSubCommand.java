@@ -18,7 +18,7 @@ public class DEStopAllSubCommand implements SubCommand {
 
     @Override
     public String name() {
-        return "stopAll";
+        return "stopall";
     }
 
     @Override

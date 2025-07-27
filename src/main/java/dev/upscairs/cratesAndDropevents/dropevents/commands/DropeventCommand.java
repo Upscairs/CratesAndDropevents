@@ -94,7 +94,7 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
             List<String> eventNames = DropeventStorage.getDropeventNames();
 
             if(args.length == 1) {
-                return Arrays.asList("list", "info", "start", "create", "remove", "give", "edit", "stopAll", "tp");
+                return Arrays.asList("list", "info", "start", "create", "remove", "give", "edit", "stopall", "tp");
             }
             else if(args.length == 2) {
                 if(args[0].equalsIgnoreCase("info")
