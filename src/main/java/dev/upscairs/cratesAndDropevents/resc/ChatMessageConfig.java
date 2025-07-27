@@ -48,14 +48,14 @@ public class ChatMessageConfig {
         defaultMessages.put("crate.info.type-message", "<dark_aqua>Type the desired message. Use /crates cancel or the button to cancel<reset>");
         defaultMessages.put("crate.info.type-canceled", "<gray>Canceled<reset>");
 
-        defaultMessages.put("dropevent.broadcast.local.countdown", "<purple>A dropevent starts here in %ts.<reset>");
-        defaultMessages.put("dropevent.broadcast.local.start", "<purple>The dropevent started.<reset>");
-        defaultMessages.put("dropevent.broadcast.local.end", "<purple>The dropevent has ended.<reset>");
-        defaultMessages.put("dropevent.broadcast.global.countdown", "<purple>A dropevent starts in %ts at %c (%w) %l. %p<reset>");
+        defaultMessages.put("dropevent.broadcast.local.countdown", "<dark_purple>A dropevent starts here in %ts.<reset>");
+        defaultMessages.put("dropevent.broadcast.local.start", "<dark_purple>The dropevent started.<reset>");
+        defaultMessages.put("dropevent.broadcast.local.end", "<dark_purple>The dropevent has ended.<reset>");
+        defaultMessages.put("dropevent.broadcast.global.countdown", "<dark_purple>A dropevent starts in %ts at %c (%w) %l.%p<reset>");
         defaultMessages.put("dropevent.broadcast.tp-prompt.chat", "<dark_red><bold>[Teleport]<reset>");
-        defaultMessages.put("dropevent.broadcast.tp-prompt.hover", "<purple>Click to teleport to %l!<reset>");
+        defaultMessages.put("dropevent.broadcast.tp-prompt.hover", "<dark_purple>Click to teleport to %l!<reset>");
 
-        defaultMessages.put("dropevent.success.teleported", "<purple>Teleporting...<reset>");
+        defaultMessages.put("dropevent.success.teleported", "<dark_purple>Teleporting...<reset>");
         defaultMessages.put("dropevent.success.all-stopped", "<green>All events have been stopped.<reset>");
         defaultMessages.put("dropevent.success.created", "<green>Event has been created.<reset>");
         defaultMessages.put("dropevent.success.removed", "<green>Event has been removed.<reset>");

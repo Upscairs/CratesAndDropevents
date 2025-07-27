@@ -23,6 +23,8 @@ public class CrateRewardChanceGui {
 
     private NumberSelectionGui gui;
 
+    private String defaultTitle;
+
     public CrateRewardChanceGui(int dropChance, int unusedChance, Crate crate, CrateReward reward, CommandSender sender, Plugin plugin) {
 
         gui = new NumberSelectionGui(new InteractableGui(new ItemDisplayGui()), dropChance, 0, dropChance+unusedChance, sender);
@@ -33,7 +35,10 @@ public class CrateRewardChanceGui {
         this.plugin = plugin;
 
         configureClickReaction();
-        gui.setTitle("Edit chance for reward (in ‰)");
+        gui.onPostInternalClick(() -> writeTitle());
+        defaultTitle = "Configure Reward chance: ";
+
+        writeTitle();
 
     }
 
@@ -54,6 +59,11 @@ public class CrateRewardChanceGui {
 
             return new PreventCloseGui();
         });
+    }
+
+    private void writeTitle() {
+        String chanceString = ((float)gui.getNumber()/10) + "%";
+        gui.setTitle(defaultTitle + chanceString);
     }
 
     public InventoryGui getGui() {

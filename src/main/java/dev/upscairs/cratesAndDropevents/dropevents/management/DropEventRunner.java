@@ -7,6 +7,7 @@ import dev.upscairs.cratesAndDropevents.helper.BroadcastService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -263,9 +264,7 @@ public class DropEventRunner {
                 .replace("%l", locationName.isEmpty() ? "" : locationName);
 
 
-        return LegacyComponentSerializer
-                .legacyAmpersand()
-                .deserialize(s);
+        return MiniMessage.miniMessage().deserialize(s);
     }
 
     /**

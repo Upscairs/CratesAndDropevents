@@ -23,10 +23,13 @@ public class DropChanceSelectionGui {
 
     private NumberSelectionGui gui;
 
+    private String defaultTitle;
+
     public DropChanceSelectionGui(Dropevent dropevent, ItemStack changedDrop, int dropChance, int unusedChance, CommandSender sender, Plugin plugin) {
 
         gui = new NumberSelectionGui(new InteractableGui(new ItemDisplayGui()), dropChance, 0, dropChance+unusedChance, sender);
         configureClickReaction();
+        gui.onPostInternalClick(() -> writeTitle());
 
         this.dropevent = dropevent;
         this.drop = changedDrop;
@@ -34,8 +37,8 @@ public class DropChanceSelectionGui {
         this.sender = sender;
         this.plugin = plugin;
 
-        gui.setTitle("Drop chance in ‰");
-
+        defaultTitle = "Configure Drop chance: ";
+        writeTitle();
     }
 
     private void configureClickReaction() {
@@ -51,10 +54,15 @@ public class DropChanceSelectionGui {
                 if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin).getGui();
             }
-
             return new PreventCloseGui();
         });
     }
+
+    private void writeTitle() {
+        String chanceString = ((float)gui.getNumber()/10) + "%";
+        gui.setTitle(defaultTitle + chanceString);
+    }
+
 
     public InventoryGui getGui() {
         return gui;
