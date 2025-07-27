@@ -54,6 +54,10 @@ public class CrateReward implements ConfigurationSerializable, ListableGuiObject
         sequence.add(event);
     }
 
+    public CrateReward clone() {
+        return new CrateReward(sequence, plugin);
+    }
+
     @Override
     public Map<String, Object> serialize() {
         Map<String, Object> out = new LinkedHashMap<>();

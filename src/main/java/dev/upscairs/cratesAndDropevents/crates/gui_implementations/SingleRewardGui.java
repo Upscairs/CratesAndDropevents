@@ -81,6 +81,11 @@ public class SingleRewardGui {
         if(editMode == ADD_EVENT) meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Click again to cancel", "#FF5555")));
         addEventItem.setItemMeta(meta);
 
+        ItemStack cloneRewardItem = new ItemStack(Material.EMERALD);
+        meta = cloneRewardItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Reward", "#55FFFF"));
+        cloneRewardItem.setItemMeta(meta);
+
         ItemStack editChanceItem = new ItemStack(Material.CHEST);
         meta = editChanceItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Probability: " + ((float)crate.getRewards().get(reward))/10 + "%" , "#FFAA00"));
@@ -175,6 +180,7 @@ public class SingleRewardGui {
             case NONE -> {
                 gui.setItem(46, backItem);
                 gui.setItem(47, addEventItem);
+                gui.setItem(48, cloneRewardItem);
                 gui.setItem(49, editChanceItem);
                 gui.setItem(51, deleteItem);
             }
@@ -252,6 +258,16 @@ public class SingleRewardGui {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new SingleRewardGui(crate, reward, null, ADD_EVENT, sender, plugin).getGui();
                     }
+                    else if(slot == 48) {
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                        CrateReward clonedReward = reward.clone();
+                        int newChance = Math.min(crate.getUnusedChance(), crate.getRewards().get(reward));
+                        crate.setRewardChance(clonedReward, newChance);
+
+                        CrateStorage.saveCrate(crate);
+
+                        return new CrateRewardsGui(crate, sender, plugin).getGui();
+                    }
                     else if(slot == 49) {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateRewardChanceGui(crate.getRewards().get(reward), crate.getUnusedChance(), crate, reward, sender, plugin).getGui();
@@ -284,7 +300,16 @@ public class SingleRewardGui {
                         if(rewardEvent != null) reward.addEvent(rewardEvent);
                         CrateStorage.saveCrate(crate);
 
-                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+
+
+                        if(sender instanceof Player p) {
+                            if(slot == 47) {
+                                McGuiFramework.getGuiSounds().playClickSound(p);
+                            }
+                            else {
+                                McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            }
+                        }
 
                         return new SingleRewardGui(crate, reward, null, NONE, sender, plugin).getGui();
                     }
