@@ -36,7 +36,7 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
         register(new DEEditSubCommand(c));
         register(new DEGiveSubCommand(c));
         register(new DEInfoSubCommand(c));
-        register(new DEListSubCommand());
+        register(new DEListSubCommand(c));
         register(new DERemoveSubCommand(c));
         register(new DEStartSubCommand(c));
         register(new DEStopAllSubCommand(c));

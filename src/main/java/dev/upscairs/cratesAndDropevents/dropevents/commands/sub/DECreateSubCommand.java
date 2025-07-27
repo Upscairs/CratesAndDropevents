@@ -5,7 +5,9 @@ import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class DECreateSubCommand implements SubCommand {
         }
 
         if (args.length > 2) {
+            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playFailSound(p);
             sender.sendMessage(messageConfig.getColored("dropevent.error.name-no-spaces"));
             return true;
         }
@@ -45,6 +48,7 @@ public class DECreateSubCommand implements SubCommand {
         String eventName = args[1];
 
         if (DropeventStorage.getDropeventByName(eventName) != null) {
+            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playFailSound(p);
             sender.sendMessage(messageConfig.getColored("dropevent.error.name-already-exists"));
             return true;
         }

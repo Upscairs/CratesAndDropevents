@@ -42,6 +42,7 @@ public class ChatMessageConfig {
         defaultMessages.put("crate.success.skull-updated", "<green>Crate texture has been updated.<reset>");
         defaultMessages.put("crate.success.deleted",  "<green>Crate has been deleted.<reset>");
 
+        defaultMessages.put("crate.info.type-name", "<dark_aqua>Type name of new crate. It has to be unique. Use /crates cancel or the button to cancel<reset>");
         defaultMessages.put("crate.info.type-url", "<dark_aqua>Type URL of the skull (Format: http://textures.minecraft.net/texture/someLongCode). Use /crates cancel or the button to cancel<reset>");
         defaultMessages.put("crate.info.type-sound", "<dark_aqua>Type the path of the desired sound. If you want a different volume or pitch then 1, use the format <white><path> <volume> <pitch> (seperated by spaces. Use /crates cancel or the button to cancel<reset>");
         defaultMessages.put("crate.info.type-command", "<dark_aqua>Type the desired command without <white>/<dark_aqua>. Use /crates cancel or the button to cancel<reset>");

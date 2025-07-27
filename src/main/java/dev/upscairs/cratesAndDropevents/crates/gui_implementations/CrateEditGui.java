@@ -159,7 +159,7 @@ public class CrateEditGui {
                     case 53:
                         Bukkit.dispatchCommand(sender, "crates delete " + crate.getName());
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
-                        return new CrateListGui(sender).getGui();
+                        return new CrateListGui(sender, plugin).getGui();
                     default:
                         return new PreventCloseGui();
                 }
