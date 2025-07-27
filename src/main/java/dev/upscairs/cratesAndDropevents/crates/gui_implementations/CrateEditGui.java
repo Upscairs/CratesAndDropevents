@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
@@ -9,6 +10,10 @@ import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,11 +25,14 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
+import static dev.upscairs.cratesAndDropevents.helper.EditMode.NONE;
+
 public class CrateEditGui {
 
     private Crate crate;
     private CommandSender sender;
     private Plugin plugin;
+    private ChatMessageConfig messageConfig;
 
     private boolean crateItemSelection;
 
@@ -40,6 +48,7 @@ public class CrateEditGui {
         this.sender = sender;
         this.crateItemSelection = crateItemSelection;
         this.plugin = plugin;
+        this.messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
 
         gui.setTitle("Edit " + crate.getName());
         gui.setSize(54);
@@ -79,8 +88,8 @@ public class CrateEditGui {
 
         ItemStack urlItem = new ItemStack(Material.WRITABLE_BOOK);
         meta = urlItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Edit Skull Url", "#FFAA00").decoration(TextDecoration.BOLD, true));
-        meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Use /crates url <crate-name> <url>", "#AA00AA")));
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Click to edit Skull Url", "#FFAA00").decoration(TextDecoration.BOLD, true));
+        meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Or use /crates url <crate-name> <url>", "#AA00AA")));
         urlItem.setItemMeta(meta);
         gui.setItem(23, urlItem);
 
@@ -113,6 +122,32 @@ public class CrateEditGui {
                     case 21:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateEditGui(crate, !crateItemSelection, sender, plugin).getGui();
+                    case 23:
+                        Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
+                                .clickEvent(ClickEvent.runCommand("/crates cancel"))
+                                .hoverEvent(HoverEvent.showText(Component.text("Click to Cancel", NamedTextColor.RED)))
+                                .decorate(TextDecoration.BOLD);
+                        sender.sendMessage(messageConfig.getColored("crate.info.type-url").append(cancelComponent));
+
+                        ChatMessageInputHandler.addListener(sender, (msg) -> {
+                            crate.setCrateSkullUrl(msg);
+                            CrateStorage.saveCrate(crate);
+                            sender.sendMessage(messageConfig.getColored("crate.success.value-updated"));
+
+                            if (sender instanceof Player p) {
+                                Bukkit.getScheduler().runTask(plugin, () -> {
+                                    p.openInventory(
+                                            new CrateEditGui(crate, false, sender, plugin)
+                                                    .getGui().getInventory()
+                                    );
+                                });
+                            }
+                        });
+
+                        if(sender instanceof Player p) p.closeInventory();
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        return null;
+
                     case 40:
                         Bukkit.dispatchCommand(sender, "crates rewards " + crate.getName());
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);

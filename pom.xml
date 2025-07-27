@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dev.upscairs</groupId>
     <artifactId>cratesanddropevents</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>CratesAndDropevents</name>
@@ -15,7 +15,6 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- für Copy-Plugin -->
         <shaded.classifier>shaded</shaded.classifier>
     </properties>
 
@@ -23,7 +22,6 @@
         <defaultGoal>clean package</defaultGoal>
         <plugins>
 
-            <!-- 1) Compiler-Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -34,7 +32,6 @@
                 </configuration>
             </plugin>
 
-            <!-- 2) Shade: erzeugt target/cratesanddropevents-1.0-shaded.jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -47,7 +44,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!-- Wir wollen ein extra "-shaded.jar" -->
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>${shaded.classifier}</shadedClassifierName>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -66,7 +62,6 @@
                 </executions>
             </plugin>
 
-            <!-- 3) Dependency-Plugin: Kopiert das -shaded.jar ins Plugin-Verzeichnis -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -85,9 +80,7 @@
                                     <artifactId>${project.artifactId}</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>${shaded.classifier}</classifier>
-                                    <!-- Ausgabe im plugins-Ordner -->
                                     <outputDirectory>${outputDirectory}</outputDirectory>
-                                    <!-- Benenne es um auf das „normale“ jar -->
                                     <destFileName>${project.build.finalName}.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
@@ -96,7 +89,6 @@
                 </executions>
             </plugin>
 
-            <!-- 4) Exec-Plugin: RCON Reload -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -115,7 +107,6 @@
                                 <argument>-c</argument>
                                 <argument>mcrcon -H localhost -P 25575 -p testserver_rcon "reload confirm"</argument>
                             </arguments>
-                            <!-- Fehler-Code 1 akzeptieren -->
                             <successCodes>
                                 <successCode>0</successCode>
                                 <successCode>1</successCode>
@@ -151,7 +142,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Paper API (provided) -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -159,14 +149,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- GUI-Framework -->
         <dependency>
             <groupId>com.github.Upscairs</groupId>
             <artifactId>McGuiFramework</artifactId>
             <version>v1.3.0</version>
         </dependency>
 
-        <!-- Adventure API -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
