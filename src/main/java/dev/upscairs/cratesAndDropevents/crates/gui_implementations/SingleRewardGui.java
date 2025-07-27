@@ -135,13 +135,12 @@ public class SingleRewardGui {
         shiftRightItem.setItemMeta(meta);
 
 
-        Material editDropItemMat = switch(editMode) {
-            case EDIT_ITEM_EVENT_ITEM_SELECT -> Material.SCAFFOLDING;
-            case EDIT_ITEM_EVENT -> selectedEvent.getRenderItem().getType();
-            default -> Material.BEDROCK;
+        ItemStack editDropItem = switch(editMode) {
+            case EDIT_ITEM_EVENT_ITEM_SELECT -> new ItemStack(Material.SCAFFOLDING);
+            case EDIT_ITEM_EVENT -> selectedEvent.getRenderItem().clone();
+            default -> new ItemStack(Material.BEDROCK);
         };
-
-        ItemStack editDropItem = new ItemStack(editDropItemMat);
+        editDropItem.setAmount(1);
         meta = editDropItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Edit drop", "#00AAAA"));
         meta.setEnchantmentGlintOverride(editMode == EDIT_ITEM_EVENT_ITEM_SELECT);
