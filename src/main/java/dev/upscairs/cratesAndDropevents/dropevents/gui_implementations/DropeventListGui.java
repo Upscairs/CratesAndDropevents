@@ -2,13 +2,15 @@ package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.PageGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.PageGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class DropeventListGui {
                     return new PreventCloseGui();
                 }
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 Bukkit.dispatchCommand(sender, "dropevent info " + dropevents.get(selectedIndex).getName());
                 return new PreventCloseGui();
 

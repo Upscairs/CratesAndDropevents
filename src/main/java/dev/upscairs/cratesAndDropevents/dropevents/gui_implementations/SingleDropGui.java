@@ -2,14 +2,16 @@ package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -112,14 +114,19 @@ public class SingleDropGui {
             if(slot < 54) {
                 switch (slot) {
                     case 13:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new SingleDropGui(dropevent, dropItem, !itemSelection, unusedChance, sender, plugin).getGui();
                     case 29:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropChanceSelectionGui(dropevent, dropItem, currentChance, unusedChance, sender, plugin).getGui();
                     case 33:
                         dropevent.removeDrop(dropItem);
                         DropeventStorage.saveDropevent(dropevent);
+
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropeventDropsGui(dropevent, sender, plugin).getGui();
                     case 45:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropeventDropsGui(dropevent, sender, plugin).getGui();
                 }
 
@@ -131,6 +138,7 @@ public class SingleDropGui {
                 dropevent.removeDrop(dropItem);
                 dropevent.setItemDropChance(item, currentChance);
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleDropGui(dropevent, item, false, unusedChance, sender, plugin).getGui();
             }
 

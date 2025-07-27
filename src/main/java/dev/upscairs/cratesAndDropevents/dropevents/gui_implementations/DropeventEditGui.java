@@ -2,15 +2,17 @@ package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -142,28 +144,38 @@ public class DropeventEditGui {
             if(slot < 54) {
                 switch (slot) {
                     case 10:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new EditDropeventNumberGui(dropevent.getDropRange(), 0, 999, dropevent, "Range", sender).getGui();
                     case 12:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new EditDropeventNumberGui(dropevent.getEventTimeSec(), 1, 999, dropevent, "Duration", sender).getGui();
                     case 14:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new EditDropeventNumberGui(dropevent.getDropCount(), 1, 2500, dropevent, "Drops", sender).getGui();
                     case 16:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new EditDropeventNumberGui(dropevent.getCountdownSec(), 0, 999, dropevent, "Countdown", sender).getGui();
                     case 31:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropeventDropsGui(dropevent, sender, plugin).getGui();
                     case 45:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent list");
                         return new PreventCloseGui();
                     case 49:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent start " + dropevent.getName());
                         return null;
                     case 24:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropeventEditGui(dropevent, !renderItemSelection, sender, plugin).getGui();
                     case 20:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         dropevent.setBroadcasting(!dropevent.isBroadcasting());
                         DropeventStorage.saveDropevent(dropevent);
                         return new DropeventEditGui(dropevent, renderItemSelection, sender, plugin).getGui();
                     case 22:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         dropevent.setTeleportable(!dropevent.isTeleportable());
                         DropeventStorage.saveDropevent(dropevent);
                         return new DropeventEditGui(dropevent, renderItemSelection, sender, plugin).getGui();
@@ -179,6 +191,8 @@ public class DropeventEditGui {
 
                 dropevent.setRenderItem(item);
                 DropeventStorage.saveDropevent(dropevent);
+
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new DropeventEditGui(dropevent, false, sender, plugin).getGui();
             }
 

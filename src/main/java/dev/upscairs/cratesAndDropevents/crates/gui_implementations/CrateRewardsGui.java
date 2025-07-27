@@ -4,16 +4,18 @@ import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.helper.EditMode;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.PageGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import dev.upscairs.mcGuiFramework.utility.ListableItemStack;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.PageGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -143,6 +145,7 @@ public class CrateRewardsGui {
 
                 CrateReward selectedReward = listedRewards.get(selectedIndex+45*gui.getPage());
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleRewardGui(crate,
                         selectedReward,
                         null,
@@ -152,6 +155,7 @@ public class CrateRewardsGui {
             }
 
             if(slot == 46) {
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new CrateEditGui(crate, false, sender, plugin).getGui();
             }
             //Add a new drop to the Dropevent
@@ -168,6 +172,7 @@ public class CrateRewardsGui {
 
                 CrateStorage.saveCrate(crate);
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new CrateRewardsGui(crate, sender, plugin).getGui();
             }
 

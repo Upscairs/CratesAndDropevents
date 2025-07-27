@@ -4,14 +4,16 @@ import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -106,17 +108,22 @@ public class CrateEditGui {
                 switch (slot) {
                     case 4:
                         Bukkit.dispatchCommand(sender, "crates give " + sender.getName() + " " + crate.getName() + " 64");
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new PreventCloseGui();
                     case 21:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateEditGui(crate, !crateItemSelection, sender, plugin).getGui();
                     case 40:
                         Bukkit.dispatchCommand(sender, "crates rewards " + crate.getName());
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new PreventCloseGui();
                     case 46:
                         Bukkit.dispatchCommand(sender, "crates list");
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new PreventCloseGui();
                     case 53:
                         Bukkit.dispatchCommand(sender, "crates delete " + crate.getName());
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateListGui(sender).getGui();
                     default:
                         return new PreventCloseGui();
@@ -131,11 +138,13 @@ public class CrateEditGui {
                 if(item.getType() !=  Material.PLAYER_HEAD) {
                     ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
                     sender.sendMessage(messageConfig.getColored("crate.error.non-skull-item-selected"));
+                    if(sender instanceof Player p) McGuiFramework.getGuiSounds().playFailSound(p);
                     return new PreventCloseGui();
                 }
 
                 crate.setCrateItem(item);
                 CrateStorage.saveCrate(crate);
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
                 return new CrateEditGui(crate, false, sender, plugin).getGui();
             }
 

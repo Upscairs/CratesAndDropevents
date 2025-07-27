@@ -1,9 +1,11 @@
 package dev.upscairs.cratesAndDropevents.helper;
 
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -27,6 +29,8 @@ public class ChatMessageInputHandler implements Listener {
             String plainMessage = PlainTextComponentSerializer.plainText().serialize(message);
 
             listeners.get(sender).accept(plainMessage);
+
+            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
 
             removeListener(sender);
 

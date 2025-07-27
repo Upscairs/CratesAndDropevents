@@ -1,13 +1,15 @@
 package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.NumberSelectionGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.NumberSelectionGui;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class EditDropeventNumberGui {
 
@@ -34,10 +36,12 @@ public class EditDropeventNumberGui {
     private void configureClickReaction() {
         gui.onClick((slot, item, self) -> {
             if(slot == 30) {
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
                 Bukkit.dispatchCommand(sender, "dropevent edit " + dropevent.getName() + " "  + changedSetting + " " + gui.getNumber());
                 Bukkit.dispatchCommand(sender, "dropevent info " + dropevent.getName());
             }
             else if(slot == 32) {
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 Bukkit.dispatchCommand(sender, "dropevent info " + dropevent.getName());
             }
 

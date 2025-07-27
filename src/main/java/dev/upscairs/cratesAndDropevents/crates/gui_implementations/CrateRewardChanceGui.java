@@ -4,12 +4,14 @@ import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.helper.EditMode;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.cratesAndDropevents.crates.rewards.CrateReward;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.NumberSelectionGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.NumberSelectionGui;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class CrateRewardChanceGui {
@@ -42,9 +44,11 @@ public class CrateRewardChanceGui {
                 crate.setRewardChance(reward, newProb);
                 CrateStorage.saveCrate(crate);
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
                 return new SingleRewardGui(crate, reward, null, EditMode.NONE, sender, plugin).getGui();
             }
             else if(slot == 32) {
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleRewardGui(crate, reward, null, EditMode.NONE, sender, plugin).getGui();
             }
 

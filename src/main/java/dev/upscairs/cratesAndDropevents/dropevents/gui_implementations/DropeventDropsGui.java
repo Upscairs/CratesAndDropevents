@@ -2,18 +2,20 @@ package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
+import dev.upscairs.mcGuiFramework.gui_wrappers.PageGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
 import dev.upscairs.mcGuiFramework.utility.ListableItemStack;
-import dev.upscairs.mcGuiFramework.wrappers.InteractableGui;
-import dev.upscairs.mcGuiFramework.wrappers.PageGui;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -152,13 +154,14 @@ public class DropeventDropsGui {
                 lore.remove(lore.size()-1);
                 drop.lore(lore);
 
-
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin).getGui();
 
             }
 
             //Return to DropeventEditGui
             if(slot == 46) {
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new DropeventEditGui(dropevent, false, sender, plugin).getGui();
             }
             //Add a new drop to the Dropevent
@@ -181,6 +184,7 @@ public class DropeventDropsGui {
 
                 DropeventStorage.saveDropevent(dropevent);
 
+                if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new DropeventDropsGui(dropevent, sender, plugin).getGui();
             }
 

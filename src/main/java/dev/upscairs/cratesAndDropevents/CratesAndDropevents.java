@@ -50,6 +50,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         registerConfigs();
 
         McGuiFramework.initalize(this);
+        McGuiFramework.playSounds(getConfig().getBoolean("gui.play-sounds"));
 
     }
 
@@ -103,6 +104,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.normal-players.usable", false);
         getConfig().addDefault("dropevents.normal-players.start.online-player-condition", false);
         getConfig().addDefault("dropevents.normal-players.start.min-online-players", 10);
+        getConfig().addDefault("gui.play-sounds", true);
 
         getConfig().options().copyDefaults(true);
 
