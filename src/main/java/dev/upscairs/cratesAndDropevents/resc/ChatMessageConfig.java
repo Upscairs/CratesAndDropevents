@@ -41,6 +41,7 @@ public class ChatMessageConfig {
         defaultMessages.put("crate.success.value-updated", "<green>Value has been updated.<reset>");
         defaultMessages.put("crate.success.skull-updated", "<green>Crate texture has been updated.<reset>");
         defaultMessages.put("crate.success.deleted",  "<green>Crate has been deleted.<reset>");
+        defaultMessages.put("crate.success.cloned",  "<green>Crate has been cloned.<reset>");
 
         defaultMessages.put("crate.info.type-name", "<dark_aqua>Type name of new crate. It has to be unique. Use /crates cancel or the button to cancel<reset>");
         defaultMessages.put("crate.info.type-url", "<dark_aqua>Type URL of the skull (Format: http://textures.minecraft.net/texture/someLongCode). Use /crates cancel or the button to cancel<reset>");
@@ -62,6 +63,7 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.success.removed", "<green>Event has been removed.<reset>");
         defaultMessages.put("dropevent.success.setting-changed", "<green>Setting changed successfully.<reset>");
         defaultMessages.put("dropevent.success.given", "<green>Event given<reset>");
+        defaultMessages.put("dropevent.success.cloned",  "<green>Dropevent has been cloned.<reset>");
 
         defaultMessages.put("dropevent.error.unknown-id", "<dark_red>Unknown event ID.<reset>");
         defaultMessages.put("dropevent.error.event-over", "<dark_red>This event is over.<reset>");
@@ -79,6 +81,7 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.error.missing-id", "<dark_red>You need to specify an id to do that.<reset>");
 
         defaultMessages.put("dropevent.info.sneak-for-use", "<dark_aqua>Sneak + right click to use this item.");
+        defaultMessages.put("dropevent.info.type-name", "<dark_aqua>Type name of new dropevent. It has to be unique. Use /crates cancel or the button to cancel<reset>");
 
         defaultMessages.put("system.command.error.player-not-found", "<dark_red>There is no player with that name.<reset>");
         defaultMessages.put("system.command.error.invalid-number", "<dark_red>Please specify a valid number.<reset>");

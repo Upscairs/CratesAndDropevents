@@ -47,6 +47,19 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
         this.broadcast = broadcast;
     }
 
+    public Dropevent(String name, ItemStack renderItem, int dropRange, int eventTimeSec, HashMap<ItemStack, Integer> drops, int dropCount, int countdownSec, boolean broadcast,  boolean teleportable) {
+        this.name = name;
+        this.renderItem = renderItem;
+
+        this.dropRange  = dropRange;
+        this.eventTimeSec  = eventTimeSec;
+        this.drops = drops;
+        this.dropCount  = dropCount;
+        this.countdownSec  = countdownSec;
+        this.broadcast = broadcast;
+        this.teleportable = teleportable;
+    }
+
     public String getName() {
         return name;
     }
@@ -131,6 +144,14 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
 
     public void setTeleportable(boolean teleportable) {
         this.teleportable = teleportable;
+    }
+
+    public Dropevent clone() {
+        return new Dropevent(name, renderItem, dropRange, eventTimeSec, drops, dropCount, countdownSec, broadcast, teleportable);
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

@@ -83,7 +83,7 @@ public class SingleRewardGui {
 
         ItemStack cloneRewardItem = new ItemStack(Material.EMERALD);
         meta = cloneRewardItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Reward", "#55FFFF"));
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Reward", "#55FF55"));
         cloneRewardItem.setItemMeta(meta);
 
         ItemStack editChanceItem = new ItemStack(Material.CHEST);

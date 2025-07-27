@@ -67,9 +67,22 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         this.crateItem = crateItem;
         this.name = crateItem.getItemMeta().getDisplayName();
         this.rewards = rewards;
-        addCrateFlag();
-
         this.plugin = plugin;
+
+        addCrateFlag();
+    }
+
+    public Crate(String name, ItemStack crateItem, Map<CrateReward, Integer> rewards, Plugin plugin) {
+        this.crateItem = crateItem;
+        this.name = name;
+        this.rewards = rewards;
+        this.plugin = plugin;
+
+        ItemMeta meta = crateItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent(name, "#FFAA00"));
+        crateItem.setItemMeta(meta);
+
+        addCrateFlag();
     }
 
     private void addCrateFlag() {
@@ -83,6 +96,15 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
 
     public ItemStack getCrateItem() {
         return crateItem;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+
+        ItemMeta meta = crateItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent(name, "#FFAA00"));
+        crateItem.setItemMeta(meta);
+
     }
 
     public void setCrateItem(ItemStack crateItem) {
@@ -152,6 +174,10 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         }
 
         return 1000 - summedChance;
+    }
+
+    public Crate clone() {
+        return new Crate(this.name, this.crateItem, this.rewards, this.plugin);
     }
 
     @Override

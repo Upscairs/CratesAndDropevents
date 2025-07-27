@@ -32,6 +32,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
     public void registerCommands() {
         CratesAndDropevents p = (CratesAndDropevents) plugin;
 
+        register(new CrCloneSubCommand(p));
         register(new CrCreateSubCommand(p));
         register(new CrUrlSubCommand(p));
         register(new CrGiveSubCommand(p));
@@ -113,7 +114,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
         if(!sender.isOp()) return Arrays.asList();
 
         if(args.length == 1) {
-            return Arrays.asList("cancel", "create", "delete", "give", "info", "list", "rewards", "url");
+            return Arrays.asList("cancel", "clone", "create", "delete", "give", "info", "list", "rewards", "url");
         }
 
         List<String> allCrates = CrateStorage.getCrateIds();
@@ -122,7 +123,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
         if(args.length == 2) {
 
             switch(args[0]) {
-                case "delete", "info", "rewards", "url" -> {
+                case "clone", "delete", "info", "rewards", "url" -> {
                     return allCrates;
                 }
                 case "give" -> {

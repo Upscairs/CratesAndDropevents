@@ -1,13 +1,21 @@
 package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
+import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
+import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +31,7 @@ public class DropeventEditGui {
     private CommandSender sender;
     private Plugin plugin;
     private boolean renderItemSelection;
+    private ChatMessageConfig messageConfig;
 
     private InteractableGui gui;
 
@@ -34,6 +43,7 @@ public class DropeventEditGui {
         this.sender = sender;
         this.plugin = plugin;
         this.renderItemSelection = renderItemSelection;
+        messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
 
         gui.setTitle("Edit " + dropevent.getName());
         gui.setSize(54);
@@ -103,6 +113,12 @@ public class DropeventEditGui {
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("Start event here", "#00AA00").decoration(TextDecoration.BOLD, true));
         startItem.setItemMeta(meta);
         gui.setItem(49, startItem);
+
+        ItemStack cloneItem = new ItemStack(Material.EMERALD);
+        meta = cloneItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Event", "#55FF55"));
+        cloneItem.setItemMeta(meta);
+        gui.setItem(53, cloneItem);
 
         ItemStack teleportItem = new ItemStack(Material.ENDER_PEARL);
         meta = teleportItem.getItemMeta();
@@ -179,6 +195,26 @@ public class DropeventEditGui {
                         dropevent.setTeleportable(!dropevent.isTeleportable());
                         DropeventStorage.saveDropevent(dropevent);
                         return new DropeventEditGui(dropevent, renderItemSelection, sender, plugin).getGui();
+                    case 53:
+                        Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
+                                .clickEvent(ClickEvent.runCommand("/crates cancel"))
+                                .hoverEvent(HoverEvent.showText(Component.text("Click to Cancel", NamedTextColor.RED)))
+                                .decorate(TextDecoration.BOLD);
+                        sender.sendMessage(messageConfig.getColored("dropevent.info.type-name").append(cancelComponent));
+
+                        ChatMessageInputHandler.addListener(sender, (msg) -> {
+                            if (sender instanceof Player p) {
+                                Bukkit.getScheduler().runTask(plugin, () -> {
+                                    Bukkit.dispatchCommand(sender, "dropevent clone " + dropevent.getName() + " " + msg);
+                                    p.openInventory(new DropeventListGui(sender, plugin).getGui().getInventory());
+                                });
+                            }
+                        });
+
+                        if(sender instanceof Player p) p.closeInventory();
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        return null;
+
                     default:
                         return new PreventCloseGui();
                 }

@@ -87,7 +87,7 @@ public class DropeventListGui {
                         .hoverEvent(HoverEvent.showText(Component.text("Click to Cancel", NamedTextColor.RED)))
                         .decorate(TextDecoration.BOLD);
 
-                sender.sendMessage(messageConfig.getColored("crate.info.type-name").append(cancelComponent));
+                sender.sendMessage(messageConfig.getColored("dropevent.info.type-name").append(cancelComponent));
 
                 ChatMessageInputHandler.addListener(sender, (msg) -> {
                     if (sender instanceof Player p) {

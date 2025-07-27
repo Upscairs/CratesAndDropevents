@@ -91,7 +91,14 @@ public class CrateEditGui {
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("Click to edit Skull Url", "#FFAA00").decoration(TextDecoration.BOLD, true));
         meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Or use /crates url <crate-name> <url>", "#AA00AA")));
         urlItem.setItemMeta(meta);
-        gui.setItem(23, urlItem);
+        gui.setItem(22, urlItem);
+
+        ItemStack cloneItem = new ItemStack(Material.EMERALD);
+        meta = cloneItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Clone Crate", "#55FF55"));
+        cloneItem.setItemMeta(meta);
+        gui.setItem(24, cloneItem);
+
 
         ItemStack crateItem;
 
@@ -108,25 +115,26 @@ public class CrateEditGui {
             meta.displayName(InvGuiUtils.generateDefaultTextComponent("Click to configure crate item", "#AA00AA").decoration(TextDecoration.BOLD, true));
             crateItem.setItemMeta(meta);
         }
-        gui.setItem(21, crateItem);
+        gui.setItem(20, crateItem);
     }
 
     public void configureClickReaction() {
         gui.onClick((slot, item, self) -> {
             if(slot < 54) {
+                Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
+                        .clickEvent(ClickEvent.runCommand("/crates cancel"))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to Cancel", NamedTextColor.RED)))
+                        .decorate(TextDecoration.BOLD);
+
                 switch (slot) {
                     case 4:
                         Bukkit.dispatchCommand(sender, "crates give " + sender.getName() + " " + crate.getName() + " 64");
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new PreventCloseGui();
-                    case 21:
+                    case 20:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateEditGui(crate, !crateItemSelection, sender, plugin).getGui();
-                    case 23:
-                        Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
-                                .clickEvent(ClickEvent.runCommand("/crates cancel"))
-                                .hoverEvent(HoverEvent.showText(Component.text("Click to Cancel", NamedTextColor.RED)))
-                                .decorate(TextDecoration.BOLD);
+                    case 22:
                         sender.sendMessage(messageConfig.getColored("crate.info.type-url").append(cancelComponent));
 
                         ChatMessageInputHandler.addListener(sender, (msg) -> {
@@ -143,6 +151,22 @@ public class CrateEditGui {
                                 });
                             }
                         });
+
+                        if(sender instanceof Player p) p.closeInventory();
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        return null;
+                    case 24:
+                        sender.sendMessage(messageConfig.getColored("crate.info.type-name").append(cancelComponent));
+
+                        ChatMessageInputHandler.addListener(sender, (msg) -> {
+                            if (sender instanceof Player p) {
+                                Bukkit.getScheduler().runTask(plugin, () -> {
+                                    Bukkit.dispatchCommand(sender, "crates clone " + crate.getName() + " " + msg);
+                                    p.openInventory(new CrateListGui(sender, plugin).getGui().getInventory());
+                                });
+                            }
+                        });
+
 
                         if(sender instanceof Player p) p.closeInventory();
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);

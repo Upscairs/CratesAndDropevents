@@ -32,6 +32,7 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
 
         CratesAndDropevents c = (CratesAndDropevents) plugin;
 
+        register(new DECloneSubCommand(c));
         register(new DECreateSubCommand(c));
         register(new DEEditSubCommand(c));
         register(new DEGiveSubCommand(c));
@@ -94,12 +95,13 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
             List<String> eventNames = DropeventStorage.getDropeventNames();
 
             if(args.length == 1) {
-                return Arrays.asList("list", "info", "start", "create", "remove", "give", "edit", "stopall", "tp");
+                return Arrays.asList("clone", "list", "info", "start", "create", "remove", "give", "edit", "stopall", "tp");
             }
             else if(args.length == 2) {
                 if(args[0].equalsIgnoreCase("info")
                 || args[0].equalsIgnoreCase("start")
-                || args[0].equalsIgnoreCase("remove")) {
+                || args[0].equalsIgnoreCase("remove")
+                || args[0].equalsIgnoreCase("clone")) {
                     return eventNames;
                 }
             }
