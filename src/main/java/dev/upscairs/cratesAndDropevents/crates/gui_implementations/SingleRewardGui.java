@@ -292,7 +292,7 @@ public class SingleRewardGui {
                             case 48 -> new ItemRewardEvent(new ItemStack(Material.DIAMOND));
                             case 49 -> new CommandRewardEvent("help", plugin);
                             case 50 -> new SoundRewardEvent("minecraft:entity.experience_orb.pickup", 1, 1);
-                            case 51 -> new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("hey", "#FFFFFF"));
+                            case 51 -> new MessageRewardEvent("<blue>hey");
                             case 52 -> new DelayRewardEvent(20, plugin);
                             default -> null;
                         };
@@ -428,7 +428,7 @@ public class SingleRewardGui {
                             sender.sendMessage(messageConfig.getColored("crate.info.type-message").append(cancelComponent));
 
                             ChatMessageInputHandler.addListener(sender, (msg) -> {
-                                if(selectedEvent instanceof MessageRewardEvent mrw) mrw.setMessage(msg);
+                                if(selectedEvent instanceof MessageRewardEvent mrw) mrw.setMessageRaw(msg);
                                 CrateStorage.saveCrate(crate);
                                 sender.sendMessage(messageConfig.getColored("crate.success.value-updated"));
 

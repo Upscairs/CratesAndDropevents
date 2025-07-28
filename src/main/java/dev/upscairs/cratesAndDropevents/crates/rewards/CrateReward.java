@@ -70,7 +70,7 @@ public class CrateReward implements ConfigurationSerializable, ListableGuiObject
                 m.put("command", cre.getCommand());
             } else if (evt instanceof MessageRewardEvent mre) {
                 m.put("type", "message");
-                m.put("message", LegacyComponentSerializer.legacySection().serialize(mre.getMessage()));
+                m.put("message", mre.getMessageRaw());
             }
             else if (evt instanceof DelayRewardEvent dre) {
                 m.put("type", "delay");
@@ -108,7 +108,7 @@ public class CrateReward implements ConfigurationSerializable, ListableGuiObject
                     seq.add(new CommandRewardEvent((String) m.get("command"), plugin));
                     break;
                 case "message":
-                    seq.add(new MessageRewardEvent(LegacyComponentSerializer.legacySection().deserialize((String) m.get("message"))));
+                    seq.add(new MessageRewardEvent((String) m.get("message")));
                     break;
                 case "delay":
                     seq.add(new DelayRewardEvent(((Number) m.get("ticks")).intValue(), plugin));

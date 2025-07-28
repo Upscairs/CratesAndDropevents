@@ -1,9 +1,8 @@
 package dev.upscairs.cratesAndDropevents.crates.rewards.payouts;
 
 import dev.upscairs.cratesAndDropevents.helper.EditMode;
-import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,24 +13,24 @@ import java.util.concurrent.CompletableFuture;
 
 public class MessageRewardEvent implements CrateRewardEvent {
 
-    private Component message;
+    private String messageRaw;
 
-    public MessageRewardEvent(Component message) {
-        this.message = message;
+    public MessageRewardEvent(String message) {
+        this.messageRaw = message;
     }
 
-    public Component getMessage() {
-        return message;
+    public String getMessageRaw() {
+        return messageRaw;
     }
 
-    public void setMessage(String message) {
-        this.message = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+    public void setMessageRaw(String messageRaw) {
+        this.messageRaw = messageRaw;
     }
 
     @Override
     public CompletableFuture<Void> execute(Player player, Location location) {
 
-        player.sendMessage(message);
+        player.sendMessage(MiniMessage.miniMessage().deserialize(messageRaw));
 
         return CompletableFuture.completedFuture(null);
     }
@@ -39,7 +38,7 @@ public class MessageRewardEvent implements CrateRewardEvent {
     public ItemStack getRenderItem() {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Say ", "#00AAAA").append(message));
+        meta.displayName(MiniMessage.miniMessage().deserialize("Say " + messageRaw).decoration(TextDecoration.ITALIC, false));
         item.setItemMeta(meta);
         return item;
     }
