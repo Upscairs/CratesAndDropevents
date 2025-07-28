@@ -105,7 +105,7 @@
                             <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
                                 <argument>-c</argument>
-                                <argument>mcrcon -H localhost -P 25575 -p testserver_rcon "reload confirm"</argument>
+                                <argument>mcrcon -H localhost -P 25575 -p testserver_rcon "reload"</argument>
                             </arguments>
                             <successCodes>
                                 <successCode>0</successCode>

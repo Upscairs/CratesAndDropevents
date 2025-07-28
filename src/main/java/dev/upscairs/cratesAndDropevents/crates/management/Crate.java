@@ -105,10 +105,11 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
     public void setName(String name) {
         this.name = name;
 
+        /*
         ItemMeta meta = crateItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent(name, "#FFAA00"));
         crateItem.setItemMeta(meta);
-
+        */
     }
 
     public void setCrateItem(ItemStack crateItem) {
@@ -118,6 +119,8 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
         }
 
         crateItem.setAmount(1);
+
+
 
         /*
         ItemMeta meta = crateItem.getItemMeta();
