@@ -27,7 +27,7 @@ public class CratePlaceHandler implements Listener {
 
         Player player = event.getPlayer();
         ItemStack usedItem = event.getItemInHand();
-        Location location = event.getBlock().getLocation();
+        Location location = event.getBlock().getLocation().add(0.5, 0.5, 0.5);
 
         if (usedItem == null || !usedItem.hasItemMeta()) return;
 
