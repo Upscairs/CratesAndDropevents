@@ -15,6 +15,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -95,9 +96,15 @@ public class CrateEditGui {
 
         ItemStack cloneItem = new ItemStack(Material.EMERALD);
         meta = cloneItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Clone Crate", "#55FF55"));
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Crate", "#55FF55"));
         cloneItem.setItemMeta(meta);
         gui.setItem(24, cloneItem);
+
+        ItemStack displayNameItem = new ItemStack(Material.NAME_TAG);
+        meta = displayNameItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Edit item display name", "#AAAAAA"));
+        displayNameItem.setItemMeta(meta);
+        gui.setItem(29, displayNameItem);
 
 
         ItemStack crateItem;
@@ -171,7 +178,27 @@ public class CrateEditGui {
                         if(sender instanceof Player p) p.closeInventory();
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return null;
+                    case 29:
+                        sender.sendMessage(messageConfig.getColored("crate.info.type-display-name").append(cancelComponent));
 
+                        ChatMessageInputHandler.addListener(sender, (msg) -> {
+                            if (sender instanceof Player p) {
+
+                                ItemStack crateItem = crate.getCrateItem();
+                                ItemMeta meta = crateItem.getItemMeta();
+                                meta.displayName(MiniMessage.miniMessage().deserialize(msg));
+                                crateItem.setItemMeta(meta);
+                                crate.setCrateItem(crateItem);
+
+                                Bukkit.getScheduler().runTask(plugin, () -> {
+                                    p.openInventory(new CrateEditGui(crate, false, sender, plugin).getGui().getInventory());
+                                });
+                            }
+                        });
+
+                        if(sender instanceof Player p) p.closeInventory();
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        return null;
                     case 40:
                         Bukkit.dispatchCommand(sender, "crates rewards " + crate.getName());
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
