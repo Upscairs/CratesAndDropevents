@@ -64,4 +64,8 @@ public class SoundRewardEvent implements CrateRewardEvent {
         return EditMode.EDIT_SOUND_EVENT;
     }
 
+    public SoundRewardEvent clone() {
+        return new SoundRewardEvent(soundName, volume, pitch);
+    }
+
 }

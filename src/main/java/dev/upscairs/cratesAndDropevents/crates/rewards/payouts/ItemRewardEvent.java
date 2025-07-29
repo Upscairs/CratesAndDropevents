@@ -45,4 +45,8 @@ public class ItemRewardEvent implements CrateRewardEvent {
         return EditMode.EDIT_ITEM_EVENT;
     }
 
+    public ItemRewardEvent clone() {
+        return new ItemRewardEvent(item.clone());
+    }
+
 }

@@ -46,4 +46,8 @@ public class MessageRewardEvent implements CrateRewardEvent {
     public EditMode getAssociatedEditMode() {
         return EditMode.EDIT_MESSAGE_EVENT;
     }
+
+    public MessageRewardEvent clone() {
+        return new MessageRewardEvent(messageRaw);
+    }
 }

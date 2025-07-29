@@ -51,4 +51,8 @@ public class CommandRewardEvent implements CrateRewardEvent {
     public EditMode getAssociatedEditMode() {
         return EditMode.EDIT_COMMAND_EVENT;
     }
+
+    public CommandRewardEvent clone() {
+        return new CommandRewardEvent(command, plugin);
+    }
 }

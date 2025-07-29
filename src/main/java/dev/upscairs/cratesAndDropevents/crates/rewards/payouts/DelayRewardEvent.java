@@ -49,4 +49,8 @@ public class DelayRewardEvent implements CrateRewardEvent {
         return EditMode.EDIT_DELAY_EVENT;
     }
 
+    public DelayRewardEvent clone() {
+        return new DelayRewardEvent(ticks, plugin);
+    }
+
 }

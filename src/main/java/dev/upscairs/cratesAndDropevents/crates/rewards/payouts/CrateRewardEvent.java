@@ -13,4 +13,6 @@ public interface CrateRewardEvent extends ListableGuiObject {
 
     EditMode getAssociatedEditMode();
 
+    CrateRewardEvent clone();
+
 }

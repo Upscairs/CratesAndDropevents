@@ -186,7 +186,13 @@ public class Crate implements ConfigurationSerializable, ListableGuiObject {
     }
 
     public Crate clone() {
-        return new Crate(this.name, this.crateItem, this.rewards, this.plugin);
+
+        Map<CrateReward, Integer> clonedRewards = new HashMap<>();
+        for (Map.Entry<CrateReward, Integer> entry : rewards.entrySet()) {
+            clonedRewards.put(entry.getKey().clone(), entry.getValue());
+        }
+
+        return new Crate(this.name, this.crateItem.clone(), clonedRewards, this.plugin);
     }
 
     @Override

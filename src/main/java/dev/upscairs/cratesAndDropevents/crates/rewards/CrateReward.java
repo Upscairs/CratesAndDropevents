@@ -55,7 +55,13 @@ public class CrateReward implements ConfigurationSerializable, ListableGuiObject
     }
 
     public CrateReward clone() {
-        return new CrateReward(sequence, plugin);
+
+        List<CrateRewardEvent> clonedSequence = new ArrayList<>();
+        for  (CrateRewardEvent element : sequence) {
+            clonedSequence.add(element.clone());
+        }
+
+        return new CrateReward(clonedSequence, plugin);
     }
 
     @Override

@@ -147,7 +147,13 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
     }
 
     public Dropevent clone() {
-        return new Dropevent(name, renderItem, dropRange, eventTimeSec, drops, dropCount, countdownSec, broadcast, teleportable);
+
+        HashMap<ItemStack, Integer> clonedDrops = new HashMap<>();
+        for (Map.Entry<ItemStack, Integer> entry : drops.entrySet()) {
+            clonedDrops.put(entry.getKey().clone(), entry.getValue());
+        }
+
+        return new Dropevent(name, renderItem.clone(), dropRange, eventTimeSec, clonedDrops, dropCount, countdownSec, broadcast, teleportable);
     }
 
     public void setName(String name) {
