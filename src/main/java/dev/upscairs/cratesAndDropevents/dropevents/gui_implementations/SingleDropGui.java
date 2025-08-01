@@ -134,6 +134,8 @@ public class SingleDropGui {
                         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
                         backItem.setItemMeta(meta);
 
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+
                         return new ConfirmationGui("Delete Drop?", deleteItem, backItem, () -> {
                             dropevent.removeDrop(dropItem);
                             DropeventStorage.saveDropevent(dropevent);

@@ -40,13 +40,22 @@ public class DropEventRunner {
     private static final int COUNTDOWN_FIREWORK_INTERVAL = 8;
 
     public DropEventRunner(Dropevent dropevent, Player hostingPlayer, Plugin plugin) {
-        this.dropevent = dropevent;
+        this.dropevent = dropevent.clone();
         this.centerLocation = hostingPlayer.getLocation().clone();
         this.hostingPlayer = hostingPlayer;
         this.plugin = plugin;
         this.chatMessageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
     }
 
+    public boolean startInstantly() {
+        dropevent.setCountdownSec(0);
+        return startCountdown();
+    }
+
+    public boolean startInstantly(String locationName) {
+        dropevent.setCountdownSec(0);
+        return startCountdown(locationName);
+    }
 
 
     public boolean startCountdown(String locationName) {

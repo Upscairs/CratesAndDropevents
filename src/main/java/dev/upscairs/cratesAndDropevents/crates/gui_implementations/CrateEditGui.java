@@ -221,6 +221,8 @@ public class CrateEditGui {
                         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
                         backItem.setItemMeta(meta);
 
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+
                         return new ConfirmationGui("Delete Crate?", deleteItem, backItem, () -> {
                             Bukkit.dispatchCommand(sender, "crates delete " + crate.getName());
                             if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);

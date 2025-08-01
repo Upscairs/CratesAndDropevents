@@ -284,6 +284,8 @@ public class SingleRewardGui {
                         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
                         backItem.setItemMeta(meta);
 
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+
                         return new ConfirmationGui("Delete Reward?", deleteItem, backItem, () -> {
                             crate.removeReward(reward);
                             CrateStorage.saveCrate(crate);

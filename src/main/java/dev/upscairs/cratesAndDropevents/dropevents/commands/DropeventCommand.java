@@ -40,6 +40,7 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
         register(new DEListSubCommand(c));
         register(new DERemoveSubCommand(c));
         register(new DEStartSubCommand(c));
+        register(new DEStartNowSubCommand(c));
         register(new DEStopAllSubCommand(c));
         register(new DETpSubCommand(c));
     }
@@ -95,11 +96,12 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
             List<String> eventNames = DropeventStorage.getDropeventNames();
 
             if(args.length == 1) {
-                return Arrays.asList("clone", "list", "info", "start", "create", "remove", "give", "edit", "stopall", "tp");
+                return Arrays.asList("clone", "list", "info", "start", "start-now", "create", "remove", "give", "edit", "stopall", "tp");
             }
             else if(args.length == 2) {
                 if(args[0].equalsIgnoreCase("info")
                 || args[0].equalsIgnoreCase("start")
+                || args[0].equalsIgnoreCase("start-now")
                 || args[0].equalsIgnoreCase("remove")
                 || args[0].equalsIgnoreCase("clone")) {
                     return eventNames;

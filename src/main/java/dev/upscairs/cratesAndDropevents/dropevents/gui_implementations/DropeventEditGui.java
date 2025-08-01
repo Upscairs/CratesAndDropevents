@@ -26,6 +26,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
+
 public class DropeventEditGui {
 
     private Dropevent dropevent;
@@ -111,9 +113,15 @@ public class DropeventEditGui {
 
         ItemStack startItem = new ItemStack(Material.FIREWORK_ROCKET);
         meta = startItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Start event here", "#00AA00").decoration(TextDecoration.BOLD, true));
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Start event here", "#00AA00"));
         startItem.setItemMeta(meta);
-        gui.setItem(49, startItem);
+        gui.setItem(47, startItem);
+
+        ItemStack startInstantlyItem = new ItemStack(Material.DRAGON_HEAD);
+        meta = startInstantlyItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Start event here now", "#55FFFF"));
+        startInstantlyItem.setItemMeta(meta);
+        gui.setItem(48, startInstantlyItem);
 
         ItemStack removeItem = new ItemStack(Material.LAVA_BUCKET);
         meta = removeItem.getItemMeta();
@@ -185,9 +193,13 @@ public class DropeventEditGui {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent list");
                         return new PreventCloseGui();
-                    case 49:
+                    case 47:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent start " + dropevent.getName());
+                        return null;
+                    case 48:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        Bukkit.dispatchCommand(sender, "dropevent start-now " + dropevent.getName());
                         return null;
                     case 24:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
@@ -212,6 +224,8 @@ public class DropeventEditGui {
                         meta = backItem.getItemMeta();
                         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
                         backItem.setItemMeta(meta);
+
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
 
                         return new ConfirmationGui("Delete Dropevent?", deleteItem, backItem, () -> {
                             DropeventStorage.removeDropevent(dropevent);
