@@ -2,15 +2,13 @@ package dev.upscairs.cratesAndDropevents.dropevents;
 
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import dev.upscairs.mcGuiFramework.utility.ListableGuiObject;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
 
@@ -119,8 +117,46 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
     }
 
     public void removeDrop(ItemStack item) {
-        drops.remove(item);
+
+        ItemStack keyToRemove = null;
+
+        for(ItemStack key : drops.keySet()) {
+            if(equalsIgnoringLore(key, item)) {
+                keyToRemove = key;
+                break;
+            }
+        }
+        if(keyToRemove != null) {
+            drops.remove(keyToRemove);
+        }
+
+        /*
+
+        Bukkit.getLogger().warning("Rewards:");
+
+        for (Map.Entry<ItemStack, Integer> entry : drops.entrySet()) {
+            Bukkit.getLogger().warning(entry.getKey().toString());
+            Bukkit.getLogger().warning("");
+        }
+        Bukkit.getLogger().warning("Remove:");
+        Bukkit.getLogger().warning(item.toString());
+
+        drops.remove(item);*/
     }
+
+    private static boolean equalsIgnoringLore(ItemStack a, ItemStack b) {
+        if (a == b) return true;
+        if (a == null || b == null) return false;
+        if (a.getType() != b.getType()) return false;
+        ItemMeta ma = a.getItemMeta();
+        ItemMeta mb = b.getItemMeta();
+        if (ma == null || mb == null) return ma == mb;
+        if (!Objects.equals(ma.getDisplayName(), mb.getDisplayName())) return false;
+        if (!ma.getEnchants().equals(mb.getEnchants())) return false;
+        if (!ma.getPersistentDataContainer().equals(mb.getPersistentDataContainer())) return false;
+        return true;
+    }
+
 
     public int getCountdownSec() {
         return countdownSec;
