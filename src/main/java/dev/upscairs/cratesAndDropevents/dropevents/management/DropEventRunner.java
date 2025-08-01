@@ -140,6 +140,11 @@ public class DropEventRunner {
 
         FileConfiguration config = plugin.getConfig();
 
+        if(config.getBoolean("dropevents.ops-override-restrictions") && hostingPlayer.isOp()) {
+            return true;
+        }
+
+
         if(config.getBoolean("dropevents.simultaneous-limit.active")
             && DropEventManager.getActiveCount() >= config.getInt("dropevents.simultaneous-limit.count")) {
             hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.simultaneous-limit"));
@@ -180,10 +185,6 @@ public class DropEventRunner {
             }
 
 
-        }
-
-        if(hostingPlayer.isOp()) {
-            return true;
         }
 
         if(config.getBoolean("dropevents.normal-players.start.online-player-condition")
