@@ -81,6 +81,7 @@ public class ChatMessageConfig {
         defaultMessages.put("dropevent.error.use-no-perm", "<dark_red>You don't have permission to use this event.<reset>");
         defaultMessages.put("dropevent.error.missing-id", "<dark_red>You need to specify an id to do that.<reset>");
         defaultMessages.put("dropevent.error.forbidden-world", "<dark_red>You are not allowed to start an event in this world.<reset>");
+        defaultMessages.put("dropevent.error.hopper", "<dark_red>You can't start a dropevent where hoppers could collect items.<reset>");
 
         defaultMessages.put("dropevent.info.sneak-for-use", "<dark_aqua>Sneak + right click to use this item.");
         defaultMessages.put("dropevent.info.type-name", "<dark_aqua>Type name of new dropevent. It has to be unique. Use /crates cancel or the button to cancel<reset>");

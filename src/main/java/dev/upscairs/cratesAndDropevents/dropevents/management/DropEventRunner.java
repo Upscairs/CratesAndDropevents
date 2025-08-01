@@ -10,10 +10,13 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -141,6 +144,42 @@ public class DropEventRunner {
             && DropEventManager.getActiveCount() >= config.getInt("dropevents.simultaneous-limit.count")) {
             hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.simultaneous-limit"));
             return false;
+        }
+
+        if(config.getBoolean("dropevents.hopper-prevention")) {
+
+            int range = dropevent.getDropRange();
+            Location centerLoc = centerLocation.clone();
+
+            for(int x = centerLoc.getBlockX() - range; x <= centerLoc.getBlockX() + range; x++) {
+                for(int z = centerLoc.getBlockZ() - range; z <= centerLoc.getBlockZ() + range; z++) {
+                    int highestY = centerLoc.getWorld().getHighestBlockYAt(x, z);
+
+                    Location selectedLoc = new  Location(centerLoc.getWorld(), x, highestY, z);
+
+                    Block topBlock = selectedLoc.getBlock();
+                    Block lowerBlock = selectedLoc.add(0, -1, 0).getBlock();
+
+                    if(topBlock.getType().equals(Material.HOPPER)
+                    || lowerBlock.getType().equals(Material.HOPPER)) {
+                        hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.hopper"));
+                        return false;
+                    }
+
+
+                }
+            }
+
+            Collection<Entity> nearbyEntities = centerLoc.getWorld().getNearbyEntities(centerLoc, range, 324, range);
+
+            for(Entity entity : nearbyEntities) {
+                if(entity instanceof HopperMinecart) {
+                    hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.hopper"));
+                    return false;
+                }
+            }
+
+
         }
 
         if(hostingPlayer.isOp()) {

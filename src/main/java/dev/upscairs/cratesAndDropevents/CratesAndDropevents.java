@@ -106,6 +106,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.normal-players.start.online-player-condition", false);
         getConfig().addDefault("dropevents.normal-players.start.min-online-players", 10);
         getConfig().addDefault("dropevents.forbidden-worlds", List.of("minecraft:the_nether", "minecraft:the_end"));
+        getConfig().addDefault("dropevents.hopper-prevention", false);
         getConfig().addDefault("gui.play-sounds", true);
 
         getConfig().options().copyDefaults(true);
