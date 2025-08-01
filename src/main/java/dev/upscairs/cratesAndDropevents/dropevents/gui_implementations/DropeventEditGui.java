@@ -4,6 +4,7 @@ import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
+import dev.upscairs.cratesAndDropevents.helper.ConfirmationGui;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
@@ -114,6 +115,12 @@ public class DropeventEditGui {
         startItem.setItemMeta(meta);
         gui.setItem(49, startItem);
 
+        ItemStack removeItem = new ItemStack(Material.LAVA_BUCKET);
+        meta = removeItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Dropevent", "#FF5555"));
+        removeItem.setItemMeta(meta);
+        gui.setItem(51, removeItem);
+
         ItemStack cloneItem = new ItemStack(Material.EMERALD);
         meta = cloneItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Clone Event", "#55FF55"));
@@ -195,6 +202,25 @@ public class DropeventEditGui {
                         dropevent.setTeleportable(!dropevent.isTeleportable());
                         DropeventStorage.saveDropevent(dropevent);
                         return new DropeventEditGui(dropevent, renderItemSelection, sender, plugin).getGui();
+                    case 51:
+                        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
+                        ItemMeta meta = deleteItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Dropevent", "#FF5555"));
+                        deleteItem.setItemMeta(meta);
+
+                        ItemStack backItem = new ItemStack(Material.ARROW);
+                        meta = backItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
+                        backItem.setItemMeta(meta);
+
+                        return new ConfirmationGui("Delete Dropevent?", deleteItem, backItem, () -> {
+                            DropeventStorage.removeDropevent(dropevent);
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            return new DropeventListGui(sender, plugin).getGui();
+                        }, () -> {
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                            return self;
+                        }).getGui();
                     case 53:
                         Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
                                 .clickEvent(ClickEvent.runCommand("/crates cancel"))

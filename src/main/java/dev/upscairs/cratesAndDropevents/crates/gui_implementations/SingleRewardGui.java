@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.crates.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.helper.ConfirmationGui;
 import dev.upscairs.cratesAndDropevents.helper.EditMode;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
@@ -92,7 +93,7 @@ public class SingleRewardGui {
         meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Click to configure", "#AA00AA")));
         editChanceItem.setItemMeta(meta);
 
-        ItemStack deleteItem = new ItemStack((editMode == NONE) ? Material.MINECART : Material.BARRIER);
+        ItemStack deleteItem = new ItemStack((editMode == NONE) ? Material.LAVA_BUCKET : Material.MINECART);
         meta = deleteItem.getItemMeta();
 
         String deleteSubject = (editMode == NONE) ? "Reward" : "Event";
@@ -273,10 +274,26 @@ public class SingleRewardGui {
                         return new CrateRewardChanceGui(crate.getRewards().get(reward), crate.getUnusedChance(), crate, reward, sender, plugin).getGui();
                     }
                     else if(slot == 51) {
-                        crate.removeReward(reward);
-                        CrateStorage.saveCrate(crate);
-                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
-                        return new CrateRewardsGui(crate, sender, plugin).getGui();
+                        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
+                        ItemMeta meta = deleteItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Reward", "#FF5555"));
+                        deleteItem.setItemMeta(meta);
+
+                        ItemStack backItem = new ItemStack(Material.ARROW);
+                        meta = backItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
+                        backItem.setItemMeta(meta);
+
+                        return new ConfirmationGui("Delete Reward?", deleteItem, backItem, () -> {
+                            crate.removeReward(reward);
+                            CrateStorage.saveCrate(crate);
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            return new CrateRewardsGui(crate, sender, plugin).getGui();
+                        }, () -> {
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                            return self;
+                        }).getGui();
+
                     }
 
                 }

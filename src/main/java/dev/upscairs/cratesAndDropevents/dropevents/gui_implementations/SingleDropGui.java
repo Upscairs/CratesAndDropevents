@@ -1,6 +1,9 @@
 package dev.upscairs.cratesAndDropevents.dropevents.gui_implementations;
 
+import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateRewardsGui;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
+import dev.upscairs.cratesAndDropevents.helper.ConfirmationGui;
+import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
 import dev.upscairs.mcGuiFramework.base.InventoryGui;
@@ -76,7 +79,7 @@ public class SingleDropGui {
         chanceItem.setItemMeta(meta);
         gui.setItem(29, chanceItem);
 
-        ItemStack deleteItem = new ItemStack(Material.BARRIER);
+        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
         meta = deleteItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultTextComponent("Delete Drop", "#FF5555").decoration(TextDecoration.BOLD, true));
         deleteItem.setItemMeta(meta);
@@ -120,11 +123,26 @@ public class SingleDropGui {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropChanceSelectionGui(dropevent, dropItem, currentChance, unusedChance, sender, plugin).getGui();
                     case 33:
-                        dropevent.removeDrop(dropItem);
-                        DropeventStorage.saveDropevent(dropevent);
 
-                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
-                        return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+                        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
+                        ItemMeta meta = deleteItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Drop", "#FF5555"));
+                        deleteItem.setItemMeta(meta);
+
+                        ItemStack backItem = new ItemStack(Material.ARROW);
+                        meta = backItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
+                        backItem.setItemMeta(meta);
+
+                        return new ConfirmationGui("Delete Drop?", deleteItem, backItem, () -> {
+                            dropevent.removeDrop(dropItem);
+                            DropeventStorage.saveDropevent(dropevent);
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+                        }, () -> {
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                            return new DropeventDropsGui(dropevent, sender, plugin).getGui();
+                        }).getGui();
                     case 45:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new DropeventDropsGui(dropevent, sender, plugin).getGui();
