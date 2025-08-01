@@ -95,7 +95,7 @@ public class DropeventDropsGui {
 
         //Write chances
         for (Map.Entry<ItemStack, Integer> entry : entries) {
-            ItemStack originalItem = entry.getKey();
+            ItemStack originalItem = entry.getKey().clone();
             int itemChance = entry.getValue();
             summedProbability += itemChance;
 
@@ -146,15 +146,15 @@ public class DropeventDropsGui {
                     return new PreventCloseGui();
                 }
 
-                List<ListableGuiObject> listedObjects = gui.getListedObjects();
-                ItemStack drop = listedObjects.get(selectedIndex).getRenderItem().clone();
+                List<ItemStack> originals = dropevent.getDrops().entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .map(Map.Entry::getKey)
+                        .toList();
 
-                List<Component> lore = drop.lore();
-                lore.remove(lore.size()-1);
-                drop.lore(lore);
+                ItemStack originalDrop = originals.get(selectedIndex).clone();
 
                 if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
-                return new SingleDropGui(dropevent, drop, false, unusedChance, sender, plugin).getGui();
+                return new SingleDropGui(dropevent, originalDrop, false, unusedChance, sender, plugin).getGui();
 
             }
 
