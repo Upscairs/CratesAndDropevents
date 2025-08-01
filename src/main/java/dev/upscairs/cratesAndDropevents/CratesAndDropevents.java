@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents;
 
+import dev.upscairs.cratesAndDropevents.cad_command.CaDCommand;
 import dev.upscairs.cratesAndDropevents.crates.management.DropeventItemHandler;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
@@ -24,6 +25,8 @@ import java.util.List;
 public final class CratesAndDropevents extends JavaPlugin {
 
     private static ChatMessageConfig chatMessageConfig;
+
+    public static final String PLUGIN_VERSION = "1.3.0";
 
     public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
     public final NamespacedKey CRATE_KEY = new NamespacedKey(this,"CRATE");
@@ -60,6 +63,14 @@ public final class CratesAndDropevents extends JavaPlugin {
         // Plugin shutdown logic
     }
 
+    public void reloadConfigs() {
+        reloadConfig();
+        registerConfigs();
+        DropeventStorage.init(this);
+        CrateStorage.init(this);
+
+    }
+
     private void registerCommands() {
         getCommand("dropevent").setExecutor(new DropeventCommand(this));
         getCommand("dropevent").setTabCompleter(new DropeventCommand(this));
@@ -72,6 +83,9 @@ public final class CratesAndDropevents extends JavaPlugin {
 
         getCommand("crate").setExecutor(new CratesCommand(this));
         getCommand("crate").setTabCompleter(new CratesCommand(this));
+
+        getCommand("cad").setExecutor(new CaDCommand(this));
+        getCommand("cad").setTabCompleter(new CaDCommand(this));
 
     }
 

@@ -70,42 +70,6 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
 
         return handler.execute(sender, args);
 
-        /*
-        if(args[0].equalsIgnoreCase("test")) {
-            Crate crate = new Crate(args[1], plugin);
-            if(sender instanceof Player p) {
-                p.getInventory().addItem(crate.getCrateItem());
-            }
-
-            List<CrateRewardEvent> rewards = new ArrayList<>();
-
-            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("Dropping an item and waiting 2 secs..", "#FFFFFF")));
-            rewards.add(new ItemRewardEvent(new ItemStack(Material.DIAMOND)));
-            rewards.add(new DelayRewardEvent(40, plugin));
-            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("Now playing a sound. Waiting 4 secs for drama", "#FFFFFF")));
-            rewards.add(new SoundRewardEvent("minecraft:item.totem.use", 1, 2));
-            rewards.add(new DelayRewardEvent(80, plugin));
-            rewards.add(new CommandRewardEvent("say Now executing /say command as console.", plugin));
-            rewards.add(new DelayRewardEvent(80, plugin));
-            rewards.add(new MessageRewardEvent(InvGuiUtils.generateDefaultTextComponent("And finally dropping an item again", "#FFFFFF")));
-            rewards.add(new ItemRewardEvent(new ItemStack(Material.ACACIA_BOAT)));
-
-
-            CrateReward crateReward = new CrateReward(args[1], rewards, plugin);
-
-
-            ((CratesAndDropevents) plugin).getCrateRewardStorage().saveReward(crateReward);
-
-            crate.addReward(crateReward, 1000);
-
-            System.out.println(crate.getName());
-
-            ((CratesAndDropevents) plugin).getCrateStorage().saveCrate(crate);
-
-        }
-
-        return true;*/
-
     }
 
     @Override

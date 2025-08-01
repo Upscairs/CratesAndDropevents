@@ -11,3 +11,5 @@ commands:
     ussage: /<command>
   crate:
     ussage: /<command>
+  cad:
+    ussage: /<command>
