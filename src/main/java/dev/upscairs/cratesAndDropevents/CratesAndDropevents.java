@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public final class CratesAndDropevents extends JavaPlugin {
 
@@ -104,6 +105,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.normal-players.usable", false);
         getConfig().addDefault("dropevents.normal-players.start.online-player-condition", false);
         getConfig().addDefault("dropevents.normal-players.start.min-online-players", 10);
+        getConfig().addDefault("dropevents.forbidden-worlds", List.of("minecraft:the_nether", "minecraft:the_end"));
         getConfig().addDefault("gui.play-sounds", true);
 
         getConfig().options().copyDefaults(true);

@@ -33,7 +33,7 @@ public class CommandRewardEvent implements CrateRewardEvent {
     @Override
     public CompletableFuture<Void> execute(Player player, Location location) {
         String resolved = command.replace("{player}", player.getName())
-                .replace("{world}", location.getWorld().getName())
+                .replace("{world}", location.getWorld().getKey().asString())
                 .replace("{location}", location.getX() + " " + location.getY() + " " + location.getZ());
         Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), resolved));
         return CompletableFuture.completedFuture(null);
