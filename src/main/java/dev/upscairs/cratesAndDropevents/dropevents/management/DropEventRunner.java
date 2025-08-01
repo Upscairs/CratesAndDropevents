@@ -151,6 +151,14 @@ public class DropEventRunner {
             return false;
         }
 
+        String worldName = centerLocation.getWorld().getKey().asString();
+        List<String> forbiddenWorlds = config.getStringList("dropevents.forbidden-worlds");
+
+        if(forbiddenWorlds.contains(worldName)) {
+            hostingPlayer.sendMessage(chatMessageConfig.getColored("dropevent.error.forbidden-world"));
+            return false;
+        }
+
         return true;
     }
 
