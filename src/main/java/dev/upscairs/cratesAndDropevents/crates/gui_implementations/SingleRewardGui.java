@@ -21,12 +21,16 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 import java.util.Collections;
 import java.util.List;
@@ -92,6 +96,11 @@ public class SingleRewardGui {
         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Probability: " + ((float)crate.getRewards().get(reward))/10 + "%" , "#FFAA00"));
         meta.lore(List.of(InvGuiUtils.generateDefaultTextComponent("Click to configure", "#AA00AA")));
         editChanceItem.setItemMeta(meta);
+
+        ItemStack simulateItem = new ItemStack(Material.REDSTONE_TORCH);
+        meta = simulateItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Simulate Reward", "#55FFFF"));
+        simulateItem.setItemMeta(meta);
 
         ItemStack deleteItem = new ItemStack((editMode == NONE) ? Material.LAVA_BUCKET : Material.MINECART);
         meta = deleteItem.getItemMeta();
@@ -183,6 +192,7 @@ public class SingleRewardGui {
                 gui.setItem(47, addEventItem);
                 gui.setItem(48, cloneRewardItem);
                 gui.setItem(49, editChanceItem);
+                gui.setItem(50, simulateItem);
                 gui.setItem(51, deleteItem);
             }
             case ADD_EVENT -> {
@@ -272,6 +282,10 @@ public class SingleRewardGui {
                     else if(slot == 49) {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new CrateRewardChanceGui(crate.getRewards().get(reward), crate.getUnusedChance(), crate, reward, sender, plugin).getGui();
+                    }
+                    else if(slot == 50) {
+                        if(sender instanceof Player player) reward.execute(player, getLookingAt(player, 2));
+                        return new PreventCloseGui();
                     }
                     else if(slot == 51) {
                         ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
@@ -484,6 +498,29 @@ public class SingleRewardGui {
 
         });
 
+    }
+
+    private static Location getLookingAt(Player player, double maxDist) {
+        Location eye = player.getEyeLocation();
+        Vector dir = eye.getDirection();
+
+        RayTraceResult result = player.getWorld().rayTraceBlocks(
+                eye,
+                dir,
+                maxDist,
+                FluidCollisionMode.NEVER,
+                true
+        );
+
+        if (result != null) {
+            if (result.getHitBlock() != null) {
+                return result.getHitBlock().getLocation().add(0.5, 0.5, 0.5);
+            } else if (result.getHitPosition() != null) {
+                return result.getHitPosition().toLocation(player.getWorld());
+            }
+        }
+
+        return eye.add(dir.multiply(maxDist));
     }
 
     public PageGui getGui() {
