@@ -4,6 +4,7 @@ import dev.upscairs.cratesAndDropevents.helper.EditMode;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -47,7 +48,7 @@ public class SoundRewardEvent implements CrateRewardEvent {
 
     @Override
     public CompletableFuture<Void> execute(Player player, Location location) {
-        player.playSound(player.getLocation(), soundName, volume, pitch);
+        player.playSound(player.getLocation(), soundName, SoundCategory.BLOCKS, volume, pitch);
         return CompletableFuture.completedFuture(null);
     }
 

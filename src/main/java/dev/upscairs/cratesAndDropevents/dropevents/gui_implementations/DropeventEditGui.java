@@ -4,6 +4,7 @@ import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
+import dev.upscairs.cratesAndDropevents.helper.ConfirmationGui;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
@@ -24,6 +25,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 
 public class DropeventEditGui {
 
@@ -110,9 +113,21 @@ public class DropeventEditGui {
 
         ItemStack startItem = new ItemStack(Material.FIREWORK_ROCKET);
         meta = startItem.getItemMeta();
-        meta.displayName(InvGuiUtils.generateDefaultTextComponent("Start event here", "#00AA00").decoration(TextDecoration.BOLD, true));
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Start event here", "#00AA00"));
         startItem.setItemMeta(meta);
-        gui.setItem(49, startItem);
+        gui.setItem(47, startItem);
+
+        ItemStack startInstantlyItem = new ItemStack(Material.DRAGON_HEAD);
+        meta = startInstantlyItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Start event here now", "#55FFFF"));
+        startInstantlyItem.setItemMeta(meta);
+        gui.setItem(48, startInstantlyItem);
+
+        ItemStack removeItem = new ItemStack(Material.LAVA_BUCKET);
+        meta = removeItem.getItemMeta();
+        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Dropevent", "#FF5555"));
+        removeItem.setItemMeta(meta);
+        gui.setItem(51, removeItem);
 
         ItemStack cloneItem = new ItemStack(Material.EMERALD);
         meta = cloneItem.getItemMeta();
@@ -178,9 +193,13 @@ public class DropeventEditGui {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent list");
                         return new PreventCloseGui();
-                    case 49:
+                    case 47:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         Bukkit.dispatchCommand(sender, "dropevent start " + dropevent.getName());
+                        return null;
+                    case 48:
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                        Bukkit.dispatchCommand(sender, "dropevent start-now " + dropevent.getName());
                         return null;
                     case 24:
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
@@ -195,6 +214,27 @@ public class DropeventEditGui {
                         dropevent.setTeleportable(!dropevent.isTeleportable());
                         DropeventStorage.saveDropevent(dropevent);
                         return new DropeventEditGui(dropevent, renderItemSelection, sender, plugin).getGui();
+                    case 51:
+                        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
+                        ItemMeta meta = deleteItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Dropevent", "#FF5555"));
+                        deleteItem.setItemMeta(meta);
+
+                        ItemStack backItem = new ItemStack(Material.ARROW);
+                        meta = backItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
+                        backItem.setItemMeta(meta);
+
+                        if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+
+                        return new ConfirmationGui("Delete Dropevent?", deleteItem, backItem, () -> {
+                            DropeventStorage.removeDropevent(dropevent);
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            return new DropeventListGui(sender, plugin).getGui();
+                        }, () -> {
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                            return self;
+                        }).getGui();
                     case 53:
                         Component cancelComponent = Component.text(" [Cancel]", NamedTextColor.RED)
                                 .clickEvent(ClickEvent.runCommand("/crates cancel"))

@@ -2,10 +2,12 @@ package dev.upscairs.cratesAndDropevents.crates.gui_implementations;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.helper.ChatMessageInputHandler;
+import dev.upscairs.cratesAndDropevents.helper.ConfirmationGui;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
+import dev.upscairs.mcGuiFramework.base.InventoryGui;
 import dev.upscairs.mcGuiFramework.base.ItemDisplayGui;
 import dev.upscairs.mcGuiFramework.functionality.PreventCloseGui;
 import dev.upscairs.mcGuiFramework.gui_wrappers.InteractableGui;
@@ -25,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static dev.upscairs.cratesAndDropevents.helper.EditMode.NONE;
 
@@ -69,7 +72,7 @@ public class CrateEditGui {
         giveItem.setItemMeta(meta);
         gui.setItem(4, giveItem);
 
-        ItemStack deleteItem = new ItemStack(Material.BARRIER);
+        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
         meta = deleteItem.getItemMeta();
         meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete crate", "#FF5555"));
         deleteItem.setItemMeta(meta);
@@ -208,9 +211,27 @@ public class CrateEditGui {
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                         return new PreventCloseGui();
                     case 53:
-                        Bukkit.dispatchCommand(sender, "crates delete " + crate.getName());
+                        ItemStack deleteItem = new ItemStack(Material.LAVA_BUCKET);
+                        ItemMeta meta = deleteItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Delete Crate", "#FF5555"));
+                        deleteItem.setItemMeta(meta);
+
+                        ItemStack backItem = new ItemStack(Material.ARROW);
+                        meta = backItem.getItemMeta();
+                        meta.displayName(InvGuiUtils.generateDefaultHeaderComponent("Abort", "#AAAAAA"));
+                        backItem.setItemMeta(meta);
+
                         if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
-                        return new CrateListGui(sender, plugin).getGui();
+
+                        return new ConfirmationGui("Delete Crate?", deleteItem, backItem, () -> {
+                            Bukkit.dispatchCommand(sender, "crates delete " + crate.getName());
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playSuccessSound(p);
+                            return new CrateListGui(sender, plugin).getGui();
+                        }, () -> {
+                            if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
+                            return self;
+                        }).getGui();
+
                     default:
                         return new PreventCloseGui();
                 }

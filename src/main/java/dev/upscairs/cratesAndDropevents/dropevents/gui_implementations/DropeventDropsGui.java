@@ -125,7 +125,6 @@ public class DropeventDropsGui {
 
         }
 
-
         gui.setListedObjects(updated);
     }
 
