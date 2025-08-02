@@ -85,6 +85,7 @@ public class ChatMessageConfig {
 
         defaultMessages.put("dropevent.info.sneak-for-use", "<dark_aqua>Sneak + right click to use this item.");
         defaultMessages.put("dropevent.info.type-name", "<dark_aqua>Type name of new dropevent. It has to be unique. Use /crates cancel or the button to cancel<reset>");
+        defaultMessages.put("dropevent.info.type-command", "<dark_aqua>Type the desired command without <white>/<dark_aqua>. Type <white>.<dark_aqua> to clear the command. Use /crates cancel or the button to cancel<reset>");
 
         defaultMessages.put("system.command.error.player-not-found", "<dark_red>There is no player with that name.<reset>");
         defaultMessages.put("system.command.error.invalid-number", "<dark_red>Please specify a valid number.<reset>");

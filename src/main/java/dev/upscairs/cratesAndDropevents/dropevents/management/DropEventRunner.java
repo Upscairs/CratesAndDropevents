@@ -118,6 +118,15 @@ public class DropEventRunner {
 
         List<Double> dropTimes = generateDropTimes();
 
+        if(dropevent.getStartupCommand() != null && !dropevent.getStartupCommand().equals("") && !dropevent.getStartupCommand().equals(".")) {
+
+            String command = dropevent.getStartupCommand()
+                    .replace("{world}", centerLocation.getWorld().getKey().asString())
+                    .replace("{location}", centerLocation.getX() + " " + centerLocation.getY() + " " + centerLocation.getZ());
+
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), dropevent.getStartupCommand());
+        }
+
         BroadcastService.sendLocalBroadcast(centerLocation,
                 dropevent.getDropRange()+25,
                 translateBroadDataCodes(chatMessageConfig.get("dropevent.broadcast.local.start")));

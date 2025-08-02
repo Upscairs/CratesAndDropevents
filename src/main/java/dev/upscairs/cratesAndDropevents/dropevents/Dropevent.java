@@ -22,6 +22,7 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
     private int countdownSec;
     private boolean broadcast;
     private boolean teleportable;
+    private String startupCommand;
 
     public Dropevent(String name) {
         this.name = name;
@@ -45,7 +46,7 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
         this.broadcast = broadcast;
     }
 
-    public Dropevent(String name, ItemStack renderItem, int dropRange, int eventTimeSec, HashMap<ItemStack, Integer> drops, int dropCount, int countdownSec, boolean broadcast,  boolean teleportable) {
+    public Dropevent(String name, ItemStack renderItem, int dropRange, int eventTimeSec, HashMap<ItemStack, Integer> drops, int dropCount, int countdownSec, boolean broadcast,  boolean teleportable, String startupCommand) {
         this.name = name;
         this.renderItem = renderItem;
 
@@ -56,6 +57,7 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
         this.countdownSec  = countdownSec;
         this.broadcast = broadcast;
         this.teleportable = teleportable;
+        this.startupCommand = startupCommand;
     }
 
     public String getName() {
@@ -102,6 +104,14 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
 
     public int getDropCount() {
         return dropCount;
+    }
+
+    public String getStartupCommand() {
+        return startupCommand;
+    }
+
+    public void setStartupCommand(String startupCommand) {
+        this.startupCommand = startupCommand;
     }
 
     public void setDropCount(int dropCount) {
@@ -189,7 +199,9 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
             clonedDrops.put(entry.getKey().clone(), entry.getValue());
         }
 
-        return new Dropevent(name, renderItem.clone(), dropRange, eventTimeSec, clonedDrops, dropCount, countdownSec, broadcast, teleportable);
+        return new Dropevent(name, renderItem.clone(), dropRange, eventTimeSec, clonedDrops,
+                dropCount, countdownSec, broadcast, teleportable,
+                startupCommand == null ? null : new String(startupCommand));
     }
 
     public void setName(String name) {
@@ -242,6 +254,7 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
         map.put("countdownSec", countdownSec);
         map.put("broadcast", broadcast);
         map.put("teleportable", teleportable);
+        map.put("startupCommand", startupCommand);
 
         //Drops list
         List<Map<String, Object>> dropsList = new ArrayList<>();
@@ -263,6 +276,7 @@ public class Dropevent implements ListableGuiObject, ConfigurationSerializable {
         event.setEventTimeSec((int) map.get("eventTimeSec"));
         event.setDropCount((int) map.get("dropCount"));
         event.setCountdownSec((int) map.get("countdownSec"));
+        event.startupCommand = (String) map.get("startupCommand");
 
         if (map.containsKey("broadcast")) {
             event.setBroadcasting((boolean) map.get("broadcast"));
