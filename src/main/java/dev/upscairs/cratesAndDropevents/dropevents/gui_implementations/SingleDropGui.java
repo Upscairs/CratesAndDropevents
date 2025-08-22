@@ -158,6 +158,8 @@ public class SingleDropGui {
                 dropevent.removeDrop(dropItem);
                 dropevent.setItemDropChance(item, currentChance);
 
+                DropeventStorage.saveDropevent(dropevent);
+
                 if(sender instanceof Player p) McGuiFramework.getGuiSounds().playClickSound(p);
                 return new SingleDropGui(dropevent, item, false, unusedChance, sender, plugin).getGui();
             }
