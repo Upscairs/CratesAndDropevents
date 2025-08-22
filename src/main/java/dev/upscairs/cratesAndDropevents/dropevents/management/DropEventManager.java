@@ -40,6 +40,7 @@ public class DropEventManager {
 
     public static void stopAll() {
         for (ActiveDropEvent ade : active.values()) {
+            ade.getBossbarCountdown().stop();
             ade.stop();
         }
         active.clear();

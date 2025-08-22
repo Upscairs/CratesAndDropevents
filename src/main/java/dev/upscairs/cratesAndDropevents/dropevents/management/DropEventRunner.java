@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.dropevents.management;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
+import dev.upscairs.cratesAndDropevents.helper.BossbarCountdown;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.BroadcastService;
@@ -103,6 +104,13 @@ public class DropEventRunner {
 
         if(dropevent.isBroadcasting()) {
             BroadcastService.sendGlobalBroadcast(translateBroadDataCodes(chatMessageConfig.get("dropevent.broadcast.global.countdown")));
+        }
+
+        //Create bossbar
+        if(plugin.getConfig().getBoolean("dropevents.bossbar-countdown")) {
+            BossbarCountdown bossbarCountdown = new BossbarCountdown(plugin, centerLocation, dropevent.getDropRange(), dropevent.getCountdownSec());
+            bossbarCountdown.start();
+            activeDropEvent.setBossbarCountdown(bossbarCountdown);
         }
 
         return true;
@@ -411,6 +419,7 @@ public class DropEventRunner {
 
         return firework;
     }
+
 
 
 

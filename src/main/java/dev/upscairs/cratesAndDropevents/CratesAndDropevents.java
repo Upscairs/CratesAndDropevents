@@ -33,8 +33,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
     private static CratesAndDropevents instance;
 
-
-
     @Override
     public void onEnable() {
 
@@ -122,6 +120,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.forbidden-worlds", List.of("minecraft:the_nether", "minecraft:the_end"));
         getConfig().addDefault("dropevents.hopper-prevention", false);
         getConfig().addDefault("dropevents.ops-override-restrictions", true);
+        getConfig().addDefault("dropevents.bossbar-countdown", false);
         getConfig().addDefault("gui.play-sounds", true);
 
         getConfig().options().copyDefaults(true);

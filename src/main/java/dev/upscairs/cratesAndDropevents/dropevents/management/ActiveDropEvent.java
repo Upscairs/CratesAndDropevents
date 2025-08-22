@@ -1,6 +1,7 @@
 package dev.upscairs.cratesAndDropevents.dropevents.management;
 
 import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
+import dev.upscairs.cratesAndDropevents.helper.BossbarCountdown;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -16,6 +17,8 @@ public class ActiveDropEvent {
     private final Location center;
     private final long startMs;
     private final Set<UUID> teleported = ConcurrentHashMap.newKeySet();
+
+    private BossbarCountdown  bossbarCountdown;
 
     private final List<BukkitTask> tasks = new ArrayList<>();
 
@@ -48,6 +51,14 @@ public class ActiveDropEvent {
     public void stop() {
         for (BukkitTask t : tasks) t.cancel();
         tasks.clear();
+    }
+
+    public void setBossbarCountdown(BossbarCountdown bossbarCountdown) {
+        this.bossbarCountdown = bossbarCountdown;
+    }
+
+    public BossbarCountdown getBossbarCountdown() {
+        return bossbarCountdown;
     }
 
 }
