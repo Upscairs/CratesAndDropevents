@@ -24,6 +24,8 @@ public class BossbarCountdown {
     private final Set<UUID> shownPlayers = new HashSet<>();
     private long startTime;
 
+    private static final HashMap<BossbarCountdown, Location> activeBossbars = new HashMap<>();
+
     public BossbarCountdown(Plugin plugin, Location center, double radius, long durationSeconds) {
         this.plugin = plugin;
         this.center = center.clone();
@@ -36,6 +38,13 @@ public class BossbarCountdown {
     }
 
     public void start() {
+
+        if(bossbarInRangeExists(center, radius)) {
+            return;
+        }
+        activeBossbars.put(this, center.clone());
+
+
         this.startTime = System.currentTimeMillis();
 
         this.task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
@@ -100,11 +109,22 @@ public class BossbarCountdown {
         }
         shownPlayers.clear();
         bossBar.setVisible(false);
+        activeBossbars.remove(this);
     }
 
     private String formatTime(long seconds) {
         long m = seconds / 60;
         long s = seconds % 60;
         return String.format("%d:%02d", m, s);
+    }
+
+    private boolean bossbarInRangeExists(Location center, double radius) {
+        for(BossbarCountdown bossbar : activeBossbars.keySet()) {
+            double centerDistances = center.distance(bossbar.center);
+            if (centerDistances <= radius) {
+                return true;
+            }
+        }
+        return false;
     }
 }
