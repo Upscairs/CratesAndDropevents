@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
 
 public class DEEditSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
 
     public DEEditSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
 
@@ -38,6 +38,8 @@ public class DEEditSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length < 3) {
             sender.sendMessage(messageConfig.getColored("system.command.error.not-enough-arguments"));

@@ -16,11 +16,9 @@ import java.util.List;
 
 public class CrCreateSubCommand implements SubCommand {
 
-    private ChatMessageConfig messageConfig;
-    private CratesAndDropevents plugin;
+    private final CratesAndDropevents plugin;
 
     public CrCreateSubCommand(CratesAndDropevents plugin) {
-        messageConfig = plugin.getChatMessageConfig();
         this.plugin = plugin;
     }
 
@@ -39,6 +37,8 @@ public class CrCreateSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length <= 1) {
             sender.sendMessage(messageConfig.getColored("crate.error.missing-name"));

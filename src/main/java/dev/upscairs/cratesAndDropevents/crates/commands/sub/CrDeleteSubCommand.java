@@ -15,10 +15,10 @@ import java.util.List;
 
 public class CrDeleteSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public CrDeleteSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -34,6 +34,8 @@ public class CrDeleteSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         if (!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length <= 1) {
             sender.sendMessage(messageConfig.getColored("crate.error.missing-name"));

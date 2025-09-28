@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 public class DETpSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public DETpSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -36,6 +36,8 @@ public class DETpSubCommand implements SubCommand {
         if(!isSenderPermitted(sender)) return true;
 
         if(!(sender instanceof Player p)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         UUID id;
 
@@ -75,9 +77,7 @@ public class DETpSubCommand implements SubCommand {
 
     @Override
     public boolean isSenderPermitted(CommandSender sender) {
-        if(!(sender instanceof Player p)) return false;
-
-        return true;
+        return sender instanceof Player p;
     }
 
     @Override

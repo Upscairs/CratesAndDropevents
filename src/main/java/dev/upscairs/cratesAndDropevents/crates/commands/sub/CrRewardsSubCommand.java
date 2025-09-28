@@ -16,11 +16,9 @@ import java.util.List;
 
 public class CrRewardsSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
-    private final Plugin plugin;
+    private final CratesAndDropevents plugin;
 
     public CrRewardsSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
         this.plugin = plugin;
     }
 
@@ -38,6 +36,8 @@ public class CrRewardsSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         if(!isSenderPermitted(sender)) return true;
         if(!(sender instanceof Player p))  return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length <= 1) {
             sender.sendMessage(messageConfig.getColored("system.command.error.not-enough-arguments"));

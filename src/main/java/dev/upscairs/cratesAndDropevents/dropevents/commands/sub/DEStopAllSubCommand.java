@@ -11,10 +11,10 @@ import java.util.List;
 
 public class DEStopAllSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public DEStopAllSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -31,6 +31,8 @@ public class DEStopAllSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         DropEventManager.stopAll();
         sender.sendMessage(messageConfig.getColored("dropevent.success.all-stopped"));

@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 public class CrGiveSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public CrGiveSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
 
@@ -40,6 +40,8 @@ public class CrGiveSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         if (!isSenderPermitted(sender)) return true;
         if (!(sender instanceof Player p)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if (args.length <= 1) {
             sender.sendMessage(messageConfig.getColored("crate.error.missing-player"));

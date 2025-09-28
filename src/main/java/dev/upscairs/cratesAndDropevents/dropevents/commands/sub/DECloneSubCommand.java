@@ -16,10 +16,10 @@ import java.util.List;
 
 public class DECloneSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public DECloneSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
 
@@ -37,6 +37,8 @@ public class DECloneSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length <= 2) {
             sender.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));

@@ -13,10 +13,10 @@ import java.util.List;
 
 public class DERemoveSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public DERemoveSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -33,6 +33,8 @@ public class DERemoveSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length == 1) {
             sender.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));

@@ -18,11 +18,9 @@ import java.util.List;
 public class CrInfoSubCommand implements SubCommand {
 
     private final CratesAndDropevents plugin;
-    private final ChatMessageConfig messageConfig;
 
     public CrInfoSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;
-        this.messageConfig = plugin.getChatMessageConfig();
     }
 
 
@@ -40,6 +38,8 @@ public class CrInfoSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         if(!isSenderPermitted(sender)) return true;
         if(!(sender instanceof Player p)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         if(args.length <= 1) {
             p.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));

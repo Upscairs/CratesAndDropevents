@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents.dropevents.commands.sub;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.gui_implementations.DropeventListGui;
 import org.bukkit.command.Command;
@@ -11,9 +12,9 @@ import java.util.List;
 
 public class DEListSubCommand implements SubCommand {
 
-    private Plugin plugin;
+    private final CratesAndDropevents plugin;
 
-    public DEListSubCommand(Plugin plugin) {
+    public DEListSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;
     }
 

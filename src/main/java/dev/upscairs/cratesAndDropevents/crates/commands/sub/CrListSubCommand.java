@@ -1,5 +1,6 @@
 package dev.upscairs.cratesAndDropevents.crates.commands.sub;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import org.bukkit.command.Command;
@@ -13,9 +14,9 @@ import java.util.List;
 
 public class CrListSubCommand implements SubCommand {
 
-    private Plugin plugin;
+    private final CratesAndDropevents plugin;
 
-    public CrListSubCommand(Plugin plugin) {
+    public CrListSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;
     }
 

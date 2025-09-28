@@ -13,10 +13,10 @@ import java.util.List;
 
 public class CrCancelSubCommand implements SubCommand {
 
-    private ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public CrCancelSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
 
@@ -34,7 +34,7 @@ public class CrCancelSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         if(!isSenderPermitted(sender)) return true;
         ChatMessageInputHandler.removeListener(sender);
-        sender.sendMessage(messageConfig.getColored("crate.info.type-canceled"));
+        sender.sendMessage(plugin.getChatMessageConfig().getColored("crate.info.type-canceled"));
         return true;
     }
 

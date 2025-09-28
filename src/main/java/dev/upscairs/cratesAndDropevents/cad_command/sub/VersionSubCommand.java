@@ -9,7 +9,7 @@ import java.util.List;
 
 public class VersionSubCommand implements SubCommand {
 
-    CratesAndDropevents plugin;
+    private final CratesAndDropevents plugin;
 
     public VersionSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;

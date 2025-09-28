@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ReloadSubCommand implements SubCommand {
 
-    CratesAndDropevents plugin;
+    private final CratesAndDropevents plugin;
 
     public ReloadSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;

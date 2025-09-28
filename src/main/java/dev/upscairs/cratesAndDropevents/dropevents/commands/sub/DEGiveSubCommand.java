@@ -23,11 +23,9 @@ import java.util.stream.Collectors;
 public class DEGiveSubCommand implements SubCommand {
 
     private final CratesAndDropevents plugin;
-    private final ChatMessageConfig messageConfig;
 
     public DEGiveSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;
-        this.messageConfig = plugin.getChatMessageConfig();
     }
 
     @Override
@@ -44,6 +42,8 @@ public class DEGiveSubCommand implements SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
 
         if(!isSenderPermitted(sender)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         //Retrieve and check arguments
         Player target = plugin.getServer().getPlayer(args[1]);

@@ -76,6 +76,7 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
                     completions.add(cmd.name());
                 }
             }
+            return completions;
         }
 
         SubCommand handler = subcommands.get(args[0]);
