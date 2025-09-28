@@ -26,8 +26,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
     private static ChatMessageConfig chatMessageConfig;
 
-    public static final String PLUGIN_VERSION = "1.3.0";
-
     public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
     public final NamespacedKey CRATE_KEY = new NamespacedKey(this,"CRATE");
 

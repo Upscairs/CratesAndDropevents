@@ -27,7 +27,7 @@ public class VersionSubCommand implements SubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        sender.sendMessage("Version: " + plugin.PLUGIN_VERSION);
+        sender.sendMessage("Version: " + plugin.getPluginMeta().getVersion());
         return true;
     }
 

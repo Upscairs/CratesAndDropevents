@@ -1,5 +1,5 @@
 name: CratesAndDropevents
-version: '1.0'
+version: ${project.version}
 main: dev.upscairs.cratesAndDropevents.CratesAndDropevents
 api-version: '1.21'
 commands:
