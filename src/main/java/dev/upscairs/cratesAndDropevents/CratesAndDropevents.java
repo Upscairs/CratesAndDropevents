@@ -26,8 +26,6 @@ public final class CratesAndDropevents extends JavaPlugin {
 
     private static ChatMessageConfig chatMessageConfig;
 
-    public static final String PLUGIN_VERSION = "1.3.2";
-
     public final NamespacedKey EVENT_KEY = new NamespacedKey(this,"DROPEVENT_ITEM");
     public final NamespacedKey CRATE_KEY = new NamespacedKey(this,"CRATE");
 
@@ -112,6 +110,14 @@ public final class CratesAndDropevents extends JavaPlugin {
 
         saveDefaultConfig();
 
+        setConfigDefaults();
+
+        getConfig().options().copyDefaults(true);
+
+        saveConfig();
+    }
+
+    private void setConfigDefaults() {
         getConfig().addDefault("dropevents.simultaneous-limit.active", false);
         getConfig().addDefault("dropevents.simultaneous-limit.count", 5);
         getConfig().addDefault("dropevents.normal-players.usable", false);
@@ -121,6 +127,8 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.hopper-prevention", false);
         getConfig().addDefault("dropevents.ops-override-restrictions", true);
         getConfig().addDefault("dropevents.bossbar-countdown", false);
+        getConfig().addDefault("dropevents.starter-dragon", true);
+        getConfig().addDefault("crates.normal-players.view-lootpool", false);
         getConfig().addDefault("gui.play-sounds", true);
 
         getConfig().options().copyDefaults(true);

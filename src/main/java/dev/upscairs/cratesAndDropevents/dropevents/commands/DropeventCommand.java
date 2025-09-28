@@ -52,9 +52,6 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        //TODO necessary?
-        registerCommands();
-
         if(args.length == 0) {
             ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
             sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
@@ -76,68 +73,20 @@ public class DropeventCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-        if(sender instanceof Player p) {
-
-            if(!p.isOp() && args.length == 1) {
-                return Arrays.asList("tp");
-            }
-
-            if (args.length == 2 && args[0].equalsIgnoreCase("tp")) {
-                return DropEventManager.getActive().keySet().stream()
-                        .filter(id -> DropEventManager.getActive().get(id).getEvent().isTeleportable())
-                        .map(UUID::toString)
-                        .collect(Collectors.toList());
-            }
-
-            if(!p.isOp()) {
-                return null;
-            }
-
-            List<String> eventNames = DropeventStorage.getDropeventNames();
-
-            if(args.length == 1) {
-                return Arrays.asList("clone", "list", "info", "start", "start-now", "create", "remove", "give", "edit", "stopall", "tp");
-            }
-            else if(args.length == 2) {
-                if(args[0].equalsIgnoreCase("info")
-                || args[0].equalsIgnoreCase("start")
-                || args[0].equalsIgnoreCase("start-now")
-                || args[0].equalsIgnoreCase("remove")
-                || args[0].equalsIgnoreCase("clone")) {
-                    return eventNames;
+        if(args.length == 1) {
+            List<String> completions = new ArrayList<>();
+            for(SubCommand cmd : subcommands.values()) {
+                if(cmd.isSenderPermitted(sender)) {
+                    completions.add(cmd.name());
                 }
             }
-
-            if(args[0].equalsIgnoreCase("edit")) {
-                if(args.length == 2) {
-                    return eventNames;
-                }
-                if(args.length == 3) {
-                    return Arrays.asList("renderItem", "range", "duration", "drops", "countdown");
-                }
-                if(args.length == 4 && args[2].equalsIgnoreCase("renderItem")) {
-                    String partial = args[3].toUpperCase();
-                    return Arrays.stream(Material.values())
-                            .map(Material::name)
-                            .filter(name -> name.startsWith(partial))
-                            .sorted()
-                            .collect(Collectors.toList());
-                }
-            }
-
-            if(args[0].equalsIgnoreCase("give")) {
-                if(args.length == 2) {
-                    return plugin.getServer().getOnlinePlayers().stream()
-                            .map(Player::getName)
-                            .collect(Collectors.toList());
-                }
-                else if(args.length == 3) {
-                    return eventNames;
-                }
-            }
+            return completions;
         }
 
-        return null;
+        SubCommand handler = subcommands.get(args[0]);
+        if(handler == null) return Collections.emptyList();
+
+        return handler.onTabComplete(sender, command, alias, args);
 
     }
 

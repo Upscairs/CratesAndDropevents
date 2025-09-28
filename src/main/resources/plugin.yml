@@ -1,5 +1,5 @@
 name: CratesAndDropevents
-version: '1.0'
+version: ${project.version}
 main: dev.upscairs.cratesAndDropevents.CratesAndDropevents
 api-version: '1.21'
 commands:
@@ -13,3 +13,28 @@ commands:
     ussage: /<command>
   cad:
     ussage: /<command>
+permissions:
+  cad.admin:
+    description: Grants all other permissions aswell as special rights like stopping all dropevents.
+    default: op
+    children:
+      cad.dropevents.edit: true
+      cad.dropevents.start: true
+      cad.dropevents.give: true
+      cad.crates.edit: true
+      cad.crates.give: true
+  cad.dropevents.edit:
+    description: Allows a player to edit crates.
+    default: op
+  cad.dropevents.start:
+    description: Allows a player to start dropevents by command.
+    default: op
+  cad.dropevents.give:
+    description: Allows a player to give dropevent starter items to players or themselves.
+    default: op
+  cad.crates.edit:
+    description: Allows a player to edit crates.
+    default: op
+  cad.crates.give:
+    description: Allows a playe to give crates to players or themselves.
+    default: op

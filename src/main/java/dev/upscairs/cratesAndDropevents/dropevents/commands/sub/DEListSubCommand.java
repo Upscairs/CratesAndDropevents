@@ -1,7 +1,9 @@
 package dev.upscairs.cratesAndDropevents.dropevents.commands.sub;
 
+import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.gui_implementations.DropeventListGui;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -10,9 +12,9 @@ import java.util.List;
 
 public class DEListSubCommand implements SubCommand {
 
-    private Plugin plugin;
+    private final CratesAndDropevents plugin;
 
-    public DEListSubCommand(Plugin plugin) {
+    public DEListSubCommand(CratesAndDropevents plugin) {
         this.plugin = plugin;
     }
 
@@ -30,7 +32,7 @@ public class DEListSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
         if(!(sender instanceof Player p)) return true;
 
         DropeventListGui dropeventListGui = new DropeventListGui(sender, plugin);
@@ -39,7 +41,12 @@ public class DEListSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.dropevents.edit") && (sender instanceof Player);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return List.of();
     }
 }

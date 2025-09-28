@@ -2,6 +2,7 @@ package dev.upscairs.cratesAndDropevents.cad_command;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.cad_command.sub.ReloadSubCommand;
+import dev.upscairs.cratesAndDropevents.cad_command.sub.UpgradeSubCommand;
 import dev.upscairs.cratesAndDropevents.cad_command.sub.VersionSubCommand;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
@@ -32,6 +33,7 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
 
         register(new ReloadSubCommand(p));
         register(new VersionSubCommand(p));
+        register(new UpgradeSubCommand(p));
 
     }
 
@@ -42,9 +44,6 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        //TODO necessary?
-        registerCommands();
 
         if(args.length == 0) {
             ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
@@ -67,10 +66,10 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!sender.isOp()) return Arrays.asList();
+        if(!sender.hasPermission("cad.admin")) return Arrays.asList();
 
         if(args.length == 1) {
-            return Arrays.asList("reload", "version");
+            return Arrays.asList("reload", "version", "upgrade");
         }
 
         return Arrays.asList();

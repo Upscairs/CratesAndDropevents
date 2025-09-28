@@ -5,18 +5,20 @@ import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.dropevents.management.ActiveDropEvent;
 import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventManager;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class DETpSubCommand implements SubCommand {
 
-    private final ChatMessageConfig messageConfig;
+    private final CratesAndDropevents plugin;
 
     public DETpSubCommand(CratesAndDropevents plugin) {
-        this.messageConfig = plugin.getChatMessageConfig();
+        this.plugin = plugin;
     }
 
     @Override
@@ -31,9 +33,11 @@ public class DETpSubCommand implements SubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
 
         if(!(sender instanceof Player p)) return true;
+
+        ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
         UUID id;
 
@@ -72,9 +76,18 @@ public class DETpSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        if(!(sender instanceof Player p)) return false;
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender instanceof Player p;
+    }
 
-        return true;
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(args.length == 2) {
+            return DropEventManager.getActive().keySet().stream()
+                    .filter(id -> DropEventManager.getActive().get(id).getEvent().isTeleportable())
+                    .map(UUID::toString)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
     }
 }

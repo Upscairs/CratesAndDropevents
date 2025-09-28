@@ -94,9 +94,11 @@ public class DropEventRunner {
         activeDropEvent.addTask(task);
 
         //Spawn dragon 10 secs before dropevent start
-        BukkitTask dragonTask = Bukkit.getScheduler().runTaskLater(plugin, () -> spawnDyingDragon(),
-                dropevent.getCountdownSec() < 8 ? 0 : (dropevent.getCountdownSec() - 10) * 20);
-        activeDropEvent.addTask(dragonTask);
+        if(plugin.getConfig().getBoolean("dropevents.starter-dragon")) {
+            BukkitTask dragonTask = Bukkit.getScheduler().runTaskLater(plugin, () -> spawnDyingDragon(),
+                    dropevent.getCountdownSec() < 8 ? 0 : (dropevent.getCountdownSec() - 10) * 20);
+            activeDropEvent.addTask(dragonTask);
+        }
 
         //Send chat messages
         BroadcastService.sendLocalBroadcast(centerLocation, dropevent.getDropRange()+25,
@@ -126,13 +128,8 @@ public class DropEventRunner {
 
         List<Double> dropTimes = generateDropTimes();
 
-        if(dropevent.getStartupCommand() != null && !dropevent.getStartupCommand().equals("") && !dropevent.getStartupCommand().equals(".")) {
-
-            String command = dropevent.getStartupCommand()
-                    .replace("{world}", centerLocation.getWorld().getKey().asString())
-                    .replace("{location}", centerLocation.getX() + " " + centerLocation.getY() + " " + centerLocation.getZ());
-
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), dropevent.getStartupCommand());
+        if(dropevent.getStartupCommand() != null && !dropevent.getStartupCommand().isEmpty() && !dropevent.getStartupCommand().equals(".")) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), resolveStartupCommand());
         }
 
         BroadcastService.sendLocalBroadcast(centerLocation,
@@ -151,6 +148,21 @@ public class DropEventRunner {
             activeDropEvent.addTask(dropTask);
         }
 
+    }
+
+    private String resolveStartupCommand() {
+        String ESCAPED_PERCENT = "__ESCAPED_PERCENT-YINm8eZh2z7mDF4oB7Cl__";
+
+        String resolved = dropevent.getStartupCommand().replace("\\%", ESCAPED_PERCENT);
+
+        resolved = resolved
+                .replace("%p", hostingPlayer.getName())
+                .replace("%w", centerLocation.getWorld().getKey().asString())
+                .replace("%l", centerLocation.getX() + " " + centerLocation.getY() + " " + centerLocation.getZ());
+
+        resolved = resolved.replace(ESCAPED_PERCENT, "%");
+
+        return resolved;
     }
 
     private boolean eventStartable() {
