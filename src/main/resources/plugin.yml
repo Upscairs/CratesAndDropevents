@@ -36,5 +36,5 @@ permissions:
     description: Allows a player to edit crates.
     default: op
   cad.crates.give:
-    description: Allows a playe to give crates to players or themselves.
+    description: Allows a player to give crates to players or themselves.
     default: op
