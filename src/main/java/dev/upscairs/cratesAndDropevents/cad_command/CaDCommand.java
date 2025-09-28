@@ -2,6 +2,7 @@ package dev.upscairs.cratesAndDropevents.cad_command;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.cad_command.sub.ReloadSubCommand;
+import dev.upscairs.cratesAndDropevents.cad_command.sub.UpgradeSubCommand;
 import dev.upscairs.cratesAndDropevents.cad_command.sub.VersionSubCommand;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
@@ -32,6 +33,7 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
 
         register(new ReloadSubCommand(p));
         register(new VersionSubCommand(p));
+        register(new UpgradeSubCommand(p));
 
     }
 
@@ -67,7 +69,7 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
         if(!sender.hasPermission("cad.admin")) return Arrays.asList();
 
         if(args.length == 1) {
-            return Arrays.asList("reload", "version");
+            return Arrays.asList("reload", "version", "upgrade");
         }
 
         return Arrays.asList();

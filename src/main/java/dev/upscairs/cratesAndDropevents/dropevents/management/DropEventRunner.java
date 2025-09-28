@@ -156,6 +156,7 @@ public class DropEventRunner {
         String resolved = dropevent.getStartupCommand().replace("\\%", ESCAPED_PERCENT);
 
         resolved = resolved
+                .replace("%p", hostingPlayer.getName())
                 .replace("%w", centerLocation.getWorld().getKey().asString())
                 .replace("%l", centerLocation.getX() + " " + centerLocation.getY() + " " + centerLocation.getZ());
 
