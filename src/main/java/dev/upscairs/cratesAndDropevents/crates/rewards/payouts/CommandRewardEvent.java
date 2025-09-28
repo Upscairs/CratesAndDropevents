@@ -32,10 +32,22 @@ public class CommandRewardEvent implements CrateRewardEvent {
 
     @Override
     public CompletableFuture<Void> execute(Player player, Location location) {
-        String resolved = command.replace("{player}", player.getName())
-                .replace("{world}", location.getWorld().getKey().asString())
-                .replace("{location}", location.getX() + " " + location.getY() + " " + location.getZ());
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), resolved));
+
+        String ESCAPED_PERCENT = "__ESCAPED_PERCENT-YINm8eZh2z7mDF4oB7Cl__";
+
+        String resolved = command.replace("\\%", ESCAPED_PERCENT);
+
+        resolved = resolved
+                .replace("%p", player.getName())
+                .replace("%w", location.getWorld().getKey().asString())
+                .replace("%l", location.getX() + " " + location.getY() + " " + location.getZ());
+
+        resolved = resolved.replace(ESCAPED_PERCENT, "%");
+
+        String finalResolved = resolved;
+        Bukkit.getScheduler().runTask(plugin,
+                () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalResolved)
+        );
         return CompletableFuture.completedFuture(null);
     }
 
