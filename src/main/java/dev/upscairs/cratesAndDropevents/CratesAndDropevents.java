@@ -128,6 +128,7 @@ public final class CratesAndDropevents extends JavaPlugin {
         getConfig().addDefault("dropevents.ops-override-restrictions", true);
         getConfig().addDefault("dropevents.bossbar-countdown", false);
         getConfig().addDefault("dropevents.starter-dragon", true);
+        getConfig().addDefault("crates.normal-players.view-lootpool", false);
         getConfig().addDefault("gui.play-sounds", true);
     }
 

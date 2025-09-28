@@ -36,6 +36,7 @@ public class ChatMessageConfig {
         defaultMessages.put("crate.error.missing-url", "<dark_red>You must specify a url.<reset>");
         defaultMessages.put("crate.error.missing-player", "<dark_red>You must specify a player.<reset>");
         defaultMessages.put("crate.error.player-not-found", "<dark_red>Player not found.<reset>");
+        defaultMessages.put("crate.error.no-crate-in-hand", "<dark_red>You need to hold the crate in your main hand.<reset>");
 
         defaultMessages.put("crate.success.created", "<green>Crate has been created.<reset>");
         defaultMessages.put("crate.success.value-updated", "<green>Value has been updated.<reset>");

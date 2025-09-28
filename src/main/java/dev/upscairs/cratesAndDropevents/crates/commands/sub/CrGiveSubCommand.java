@@ -39,7 +39,6 @@ public class CrGiveSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         if (!isSenderPermitted(sender)) return true;
-        if (!(sender instanceof Player p)) return true;
 
         ChatMessageConfig messageConfig = plugin.getChatMessageConfig();
 
