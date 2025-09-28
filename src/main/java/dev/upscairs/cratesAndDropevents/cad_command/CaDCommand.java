@@ -43,9 +43,6 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        //TODO necessary?
-        registerCommands();
-
         if(args.length == 0) {
             ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
             sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
@@ -67,7 +64,7 @@ public class CaDCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!sender.isOp()) return Arrays.asList();
+        if(!sender.hasPermission("cad.admin")) return Arrays.asList();
 
         if(args.length == 1) {
             return Arrays.asList("reload", "version");

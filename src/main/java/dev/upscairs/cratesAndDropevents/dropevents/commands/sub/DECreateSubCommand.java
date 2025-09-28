@@ -6,6 +6,7 @@ import dev.upscairs.cratesAndDropevents.dropevents.Dropevent;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.McGuiFramework;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,7 @@ public class DECreateSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
 
         if(args.length == 1) {
             sender.sendMessage(messageConfig.getColored("dropevent.error.missing-name"));
@@ -60,7 +61,12 @@ public class DECreateSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.dropevents.edit");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return List.of();
     }
 }

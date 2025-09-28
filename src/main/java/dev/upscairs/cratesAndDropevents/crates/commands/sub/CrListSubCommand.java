@@ -2,9 +2,12 @@ package dev.upscairs.cratesAndDropevents.crates.commands.sub;
 
 import dev.upscairs.cratesAndDropevents.crates.gui_implementations.CrateListGui;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class CrListSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
         if(!(sender instanceof Player p)) return true;
 
         CrateListGui cratesListGui = new CrateListGui(sender, plugin);
@@ -38,7 +41,12 @@ public class CrListSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.crates.edit") && (sender instanceof Player);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return List.of();
     }
 }

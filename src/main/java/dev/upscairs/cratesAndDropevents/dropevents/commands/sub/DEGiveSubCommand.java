@@ -8,6 +8,7 @@ import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
 import dev.upscairs.mcGuiFramework.utility.InvGuiUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DEGiveSubCommand implements SubCommand {
 
@@ -40,7 +43,7 @@ public class DEGiveSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
 
         //Retrieve and check arguments
         Player target = plugin.getServer().getPlayer(args[1]);
@@ -100,7 +103,24 @@ public class DEGiveSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.dropevents.give");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+
+        if(!isSenderPermitted(sender)) return Collections.emptyList();
+
+        if(args.length == 2) {
+            return plugin.getServer().getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .collect(Collectors.toList());
+        }
+        else if(args.length == 3) {
+            return DropeventStorage.getDropeventNames();
+        }
+
+        return Collections.emptyList();
     }
 }

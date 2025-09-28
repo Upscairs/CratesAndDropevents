@@ -13,10 +13,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CratesCommand implements CommandExecutor, TabCompleter {
@@ -51,9 +48,6 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        //TODO necessary?
-        registerCommands();
-
         if(args.length == 0) {
             ChatMessageConfig messageConfig = ((CratesAndDropevents) plugin).getChatMessageConfig();
             sender.sendMessage(messageConfig.getColored("system.command.error.not-found"));
@@ -75,33 +69,20 @@ public class CratesCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-        if(!sender.isOp()) return Arrays.asList();
-
         if(args.length == 1) {
-            return Arrays.asList("cancel", "clone", "create", "delete", "give", "info", "list", "rewards", "url");
-        }
-
-        List<String> allCrates = CrateStorage.getCrateIds();
-        List<String> onlinePlayers = Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
-
-        if(args.length == 2) {
-
-            switch(args[0]) {
-                case "clone", "delete", "info", "rewards", "url" -> {
-                    return allCrates;
-                }
-                case "give" -> {
-                    return onlinePlayers;
+            List<String> completions = new ArrayList<>();
+            for(SubCommand cmd : subcommands.values()) {
+                if(cmd.isSenderPermitted(sender)) {
+                    completions.add(cmd.name());
                 }
             }
         }
 
-        if(args.length == 3 && args[0].equalsIgnoreCase("give")) {
-            return allCrates;
-        }
+        SubCommand handler = subcommands.get(args[0]);
+        if(handler == null) return Collections.emptyList();
 
+        return handler.onTabComplete(sender, command, alias, args);
 
-        return Arrays.asList();
     }
 
 

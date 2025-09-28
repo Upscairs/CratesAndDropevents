@@ -6,10 +6,12 @@ import dev.upscairs.cratesAndDropevents.dropevents.management.DropEventRunner;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
 import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.resc.DropeventStorage;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DEStartNowSubCommand implements SubCommand {
@@ -34,7 +36,7 @@ public class DEStartNowSubCommand implements SubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
         if(!(sender instanceof Player p)) return true;
 
         if(args.length == 1) {
@@ -57,7 +59,13 @@ public class DEStartNowSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.dropevents.start");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(isSenderPermitted(sender) && args.length == 2) return DropeventStorage.getDropeventNames();
+        return Collections.emptyList();
     }
 }

@@ -5,8 +5,10 @@ import dev.upscairs.cratesAndDropevents.resc.ChatMessageConfig;
 import dev.upscairs.cratesAndDropevents.crates.management.Crate;
 import dev.upscairs.cratesAndDropevents.resc.CrateStorage;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CrUrlSubCommand implements SubCommand {
@@ -32,7 +34,7 @@ public class CrUrlSubCommand implements SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
 
-        if(!hasPermission(sender)) return true;
+        if(!isSenderPermitted(sender)) return true;
 
         if(args.length <= 1) {
             sender.sendMessage(messageConfig.getColored("crate.error.missing-name"));
@@ -59,7 +61,14 @@ public class CrUrlSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
-        return sender.isOp();
+    public boolean isSenderPermitted(CommandSender sender) {
+        return sender.hasPermission("cad.crates.edit");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if(isSenderPermitted(sender) && args.length == 2) return CrateStorage.getCrateIds();
+
+        return Collections.emptyList();
     }
 }

@@ -2,6 +2,7 @@ package dev.upscairs.cratesAndDropevents.cad_command.sub;
 
 import dev.upscairs.cratesAndDropevents.CratesAndDropevents;
 import dev.upscairs.cratesAndDropevents.helper.SubCommand;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -31,7 +32,12 @@ public class VersionSubCommand implements SubCommand {
     }
 
     @Override
-    public boolean hasPermission(CommandSender sender) {
+    public boolean isSenderPermitted(CommandSender sender) {
         return sender.isOp();
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return List.of();
     }
 }
