@@ -94,9 +94,11 @@ public class DropEventRunner {
         activeDropEvent.addTask(task);
 
         //Spawn dragon 10 secs before dropevent start
-        BukkitTask dragonTask = Bukkit.getScheduler().runTaskLater(plugin, () -> spawnDyingDragon(),
-                dropevent.getCountdownSec() < 8 ? 0 : (dropevent.getCountdownSec() - 10) * 20);
-        activeDropEvent.addTask(dragonTask);
+        if(plugin.getConfig().getBoolean("dropevents.starter-dragon")) {
+            BukkitTask dragonTask = Bukkit.getScheduler().runTaskLater(plugin, () -> spawnDyingDragon(),
+                    dropevent.getCountdownSec() < 8 ? 0 : (dropevent.getCountdownSec() - 10) * 20);
+            activeDropEvent.addTask(dragonTask);
+        }
 
         //Send chat messages
         BroadcastService.sendLocalBroadcast(centerLocation, dropevent.getDropRange()+25,
