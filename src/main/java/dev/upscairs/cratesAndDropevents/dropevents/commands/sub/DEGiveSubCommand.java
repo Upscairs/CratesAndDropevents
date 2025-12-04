@@ -74,7 +74,7 @@ public class DEGiveSubCommand implements SubCommand {
         }
 
         //Set values
-        ItemStack givenItem = dropevent.getRenderItem();
+        ItemStack givenItem = dropevent.getRenderItem().clone();
         givenItem.setAmount(count);
 
         //Flag item as dropevent starter
